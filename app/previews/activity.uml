@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="model" name="Preview">
+    <packagedElement xmi:type="uml:Activity" xmi:id="a" name="Activity">
+      <node xmi:type="uml:InitialNode" xmi:id="i" outgoing="f1"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="x" name="Check" incoming="f1" outgoing="f2"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="d" incoming="f2" outgoing="f3 f4"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="y" name="Accept" incoming="f3" outgoing="f5"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="e" incoming="f5 f4"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f1" source="i" target="x"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f2" source="x" target="d"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f3" source="d" target="y">
+        <guard xmi:type="uml:OpaqueExpression" xmi:id="g3">
+          <body>ok</body>
+        </guard>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f4" source="d" target="e"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f5" source="y" target="e"/>
+    </packagedElement>
+  </uml:Model>
+  <umldi:UMLActivityDiagram xmi:id="ad" name="Activity" modelElement="a">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="i_di" modelElement="i"><bounds x="20" y="48" width="24" height="24"/></ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="x_di" modelElement="x"><bounds x="80" y="35" width="90" height="50"/></ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="d_di" modelElement="d"><bounds x="210" y="42" width="36" height="36"/></ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="y_di" modelElement="y"><bounds x="290" y="0" width="90" height="50"/></ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="e_di" modelElement="e"><bounds x="420" y="45" width="30" height="30"/></ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f1_di" modelElement="f1" source="i_di" target="x_di"><waypoint x="44" y="60"/><waypoint x="80" y="60"/></ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f2_di" modelElement="f2" source="x_di" target="d_di"><waypoint x="170" y="60"/><waypoint x="210" y="60"/></ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f3_di" modelElement="f3" source="d_di" target="y_di"><waypoint x="228" y="42"/><waypoint x="228" y="25"/><waypoint x="290" y="25"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="f3_label" modelElement="f3"><bounds x="240" y="6" width="30" height="15"/></ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f4_di" modelElement="f4" source="d_di" target="e_di"><waypoint x="228" y="78"/><waypoint x="228" y="100"/><waypoint x="435" y="100"/><waypoint x="435" y="75"/></ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f5_di" modelElement="f5" source="y_di" target="e_di"><waypoint x="380" y="25"/><waypoint x="435" y="25"/><waypoint x="435" y="45"/></ownedElement>
+  </umldi:UMLActivityDiagram>
+</xmi:XMI>

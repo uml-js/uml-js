@@ -139,6 +139,11 @@ body {
   border-bottom: 1px solid #eee;
 }
 
+/* the preview is a picture: no panning, no hover, clicks go to the tile */
+.start .tile .preview * {
+  pointer-events: none !important;
+}
+
 .start .tile .name {
   padding: 10px;
 }
@@ -146,4 +151,16 @@ body {
 .start .hint {
   margin: 0;
   color: #777;
+}
+
+.start .restore {
+  margin: 0;
+}
+
+.start .restore[hidden] {
+  display: none;
+}
+
+.start .restore a {
+  color: hsl(205, 100%, 40%);
 }

@@ -1,6 +1,6 @@
 # UML.js
 
-A web-based modeler for UML diagrams. Models are stored as **UML 2.5.1 XMI**, with the
+A web-based modeler for UML diagrams with math support via [MathJax](https://www.mathjax.org). Models are stored as **UML 2.5.1 XMI**, with the
 diagram layout as **UML DI** in the same file, so that a `.uml` file holds both the model
 and its diagrams.
 
@@ -19,7 +19,7 @@ Try it at https://uml-js.github.io/uml-js/.
 | Deployment | Structure | `UMLDeploymentDiagram` | | |
 | Profile | Structure | `UMLProfileDiagram` | | |
 | Use case | Behavior | `UMLUseCaseDiagram` | | |
-| Activity | Behavior | `UMLActivityDiagram` | | |
+| Activity | Behavior | `UMLActivityDiagram` | ✓ | [order.uml](https://uml-js.github.io/uml-js/?src=examples/activity/order.uml) |
 | State machine | Behavior | `UMLStateMachineDiagram` | ✓ | [door.uml](https://uml-js.github.io/uml-js/?src=examples/state-machine/door.uml) |
 | Sequence | Interaction | `UMLInteractionDiagram` (kind `sequence`) | ✓ | [login.uml](https://uml-js.github.io/uml-js/?src=examples/sequence/login.uml) |
 | Communication | Interaction | `UMLInteractionDiagram` (kind `communication`) | | |
@@ -76,8 +76,7 @@ http://localhost:5173/?src=/examples/sequence/login.uml.
 
 ## Acknowledgements
 
-UML.js is built on [diagram-js](https://github.com/bpmn-io/diagram-js). Math is rendered with
-[MathJax](https://www.mathjax.org).
+UML.js is built on [diagram-js](https://github.com/bpmn-io/diagram-js).
 
 
 ## License

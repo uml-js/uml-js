@@ -359,6 +359,162 @@
       ]
     },
     {
+      "name": "Activity",
+      "superClass": [
+        "Behavior"
+      ],
+      "properties": [
+        {
+          "name": "node",
+          "type": "ActivityNode",
+          "isMany": true
+        },
+        {
+          "name": "edge",
+          "type": "ActivityEdge",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "ActivityNode",
+      "isAbstract": true,
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "incoming",
+          "type": "ActivityEdge",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "outgoing",
+          "type": "ActivityEdge",
+          "isMany": true,
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "ExecutableNode",
+      "isAbstract": true,
+      "superClass": [
+        "ActivityNode"
+      ]
+    },
+    {
+      "name": "Action",
+      "isAbstract": true,
+      "superClass": [
+        "ExecutableNode"
+      ]
+    },
+    {
+      "name": "OpaqueAction",
+      "superClass": [
+        "Action"
+      ],
+      "properties": [
+        {
+          "name": "body",
+          "type": "String",
+          "isMany": true
+        },
+        {
+          "name": "language",
+          "type": "String",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "ControlNode",
+      "isAbstract": true,
+      "superClass": [
+        "ActivityNode"
+      ]
+    },
+    {
+      "name": "InitialNode",
+      "superClass": [
+        "ControlNode"
+      ]
+    },
+    {
+      "name": "FinalNode",
+      "isAbstract": true,
+      "superClass": [
+        "ControlNode"
+      ]
+    },
+    {
+      "name": "ActivityFinalNode",
+      "superClass": [
+        "FinalNode"
+      ]
+    },
+    {
+      "name": "FlowFinalNode",
+      "superClass": [
+        "FinalNode"
+      ]
+    },
+    {
+      "name": "DecisionNode",
+      "superClass": [
+        "ControlNode"
+      ]
+    },
+    {
+      "name": "MergeNode",
+      "superClass": [
+        "ControlNode"
+      ]
+    },
+    {
+      "name": "ForkNode",
+      "superClass": [
+        "ControlNode"
+      ]
+    },
+    {
+      "name": "JoinNode",
+      "superClass": [
+        "ControlNode"
+      ]
+    },
+    {
+      "name": "ActivityEdge",
+      "isAbstract": true,
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "source",
+          "type": "ActivityNode",
+          "isReference": true
+        },
+        {
+          "name": "target",
+          "type": "ActivityNode",
+          "isReference": true
+        },
+        {
+          "name": "guard",
+          "type": "ValueSpecification"
+        }
+      ]
+    },
+    {
+      "name": "ControlFlow",
+      "superClass": [
+        "ActivityEdge"
+      ]
+    },
+    {
       "name": "OpaqueBehavior",
       "superClass": [
         "Behavior"

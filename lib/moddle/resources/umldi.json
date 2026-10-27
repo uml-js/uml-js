@@ -151,6 +151,12 @@
       ]
     },
     {
+      "name": "UMLActivityDiagram",
+      "superClass": [
+        "UMLBehaviorDiagram"
+      ]
+    },
+    {
       "name": "UMLClassifierShape",
       "superClass": [
         "UMLCompartmentableShape"

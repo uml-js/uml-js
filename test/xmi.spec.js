@@ -179,3 +179,30 @@ describe('moddle - XMI sequence diagrams', function() {
   });
 
 });
+
+
+describe('moddle - XMI activity diagrams', function() {
+
+  const orderXML = readFileSync(new URL('../examples/activity/order.uml', import.meta.url), 'utf8');
+
+  it('should read and round-trip', async function() {
+    const moddle = new UmlModdle();
+
+    const { document, warnings } = await moddle.fromXML(orderXML);
+
+    expect(warnings).toEqual([]);
+
+    const [ model ] = document.getElements('uml:Model');
+    const activity = model.packagedElement[0];
+
+    expect(activity.$type).toBe('uml:Activity');
+    expect(activity.node.find(n => n.id === 'decision').outgoing.map(f => f.id)).toEqual([ 'f3', 'f4' ]);
+    expect(activity.edge.find(e => e.id === 'f3').guard.body).toEqual([ 'in stock' ]);
+
+    const { xml } = await moddle.toXML(document);
+    const { document: reimported } = await moddle.fromXML(xml);
+
+    expect((await moddle.toXML(reimported)).xml).toBe(xml);
+  });
+
+});

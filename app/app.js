@@ -11,24 +11,32 @@ import { DIAGRAM_TYPES, UmlModeler, UmlModdle } from '../lib/uml.js';
 import stateMachinePreviewXML from './previews/state-machine.uml?raw';
 import componentPreviewXML from './previews/component.uml?raw';
 import sequencePreviewXML from './previews/sequence.uml?raw';
+import activityPreviewXML from './previews/activity.uml?raw';
 
 // small models shown on the start screen, by diagram type
 const PREVIEWS = {
   'state-machine': stateMachinePreviewXML,
   'component': componentPreviewXML,
-  'sequence': sequencePreviewXML
+  'sequence': sequencePreviewXML,
+  'activity': activityPreviewXML
 };
+
+const DISCARD_ICON = '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
 
 const PICKER_ID = 'uml-js';
 const UML_TYPES = [ { description: 'UML model', accept: { 'application/xml': [ '.uml', '.xmi', '.xml' ] } } ];
 
 const canvasElement = document.querySelector('#canvas');
 const startScreen = document.querySelector('#start');
+const restoreLink = document.querySelector('#restore');
 const viewsNav = document.querySelector('#views');
 
 const modeler = new UmlModeler({ container: canvasElement });
 
 let fileName = 'diagram';
+
+// whether the model is discarded (see #discard), but can be restored
+let discarded = false;
 
 modeler.on('views.changed', ({ views, activeView }) => {
   viewsNav.innerHTML = '';
@@ -57,6 +65,9 @@ async function openXML(xml, name) {
     }
 
     startScreen.hidden = true;
+
+    // a new model replaces the discarded one
+    setDiscarded(false);
 
     center();
 
@@ -155,10 +166,11 @@ const toolbar = createToolbar({
   buttons: {
     'load': { icon: LOAD_ICON, title: 'Load UML model', action: load },
     'save': { icon: SAVE_ICON, title: 'Save UML model', action: save },
+    'discard': { icon: DISCARD_ICON, title: 'Discard model', action: discard },
     'center': { icon: CENTER_ICON, title: 'Center', action: center }
   },
   configurations: {
-    uml: [ 'load', 'save', 'export', 'center', 'zoom-in', 'zoom-out' ]
+    uml: [ 'load', 'save', 'export', 'center', 'zoom-in', 'zoom-out', 'discard' ]
   },
   configuration: 'uml'
 });
@@ -184,6 +196,44 @@ function setModelButtonsEnabled(enabled) {
     }
   }
 }
+
+/**
+ * Back to the start screen. The model is kept (with the undo history of its
+ * diagrams), so that it can be restored until another model is opened.
+ */
+function discard() {
+  startScreen.hidden = false;
+  viewsNav.hidden = true;
+
+  document.title = 'UML.js';
+
+  setModelButtonsEnabled(false);
+  setDiscarded(true);
+}
+
+function restore() {
+  startScreen.hidden = true;
+  viewsNav.hidden = modeler.getViews().length < 2;
+
+  document.title = `${ fileName }.uml - UML.js`;
+
+  setModelButtonsEnabled(true);
+  setDiscarded(false);
+}
+
+function setDiscarded(value) {
+  discarded = value;
+
+  restoreLink.parentNode.hidden = !discarded;
+}
+
+restoreLink.addEventListener('click', event => {
+  event.preventDefault();
+
+  if (discarded) {
+    restore();
+  }
+});
 
 async function load() {
   if (typeof window.showOpenFilePicker === 'function') {
