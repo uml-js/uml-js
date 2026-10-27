@@ -21,6 +21,14 @@ const PREVIEWS = {
   'activity': activityPreviewXML
 };
 
+// examples, published along with the app (see .github/workflows/deploy.yml)
+const EXAMPLES = {
+  'state-machine': 'examples/state-machine/door.uml',
+  'component': 'examples/component/webshop.uml',
+  'sequence': 'examples/sequence/login.uml',
+  'activity': 'examples/activity/order.uml'
+};
+
 const DISCARD_ICON = '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
 
 const PICKER_ID = 'uml-js';
@@ -91,12 +99,17 @@ function center() {
 
 /**
  * One tile per diagram type, previewing a small model of that type.
- * A click opens a new, empty diagram of the type.
+ * A click opens a new, empty diagram of the type, the link below
+ * the tile the example of the type.
  */
 async function createStartScreen() {
   const tiles = startScreen.querySelector('.tiles');
 
   for (const diagramType of DIAGRAM_TYPES) {
+    const column = document.createElement('div');
+
+    column.className = 'tile-column';
+
     const tile = document.createElement('button');
 
     tile.className = 'tile';
@@ -104,7 +117,26 @@ async function createStartScreen() {
     tile.innerHTML = `<div class="preview"></div><span class="name">${ diagramType.name }</span>`;
     tile.addEventListener('click', () => openXML(diagramType.createXML(), 'diagram.uml'));
 
-    tiles.appendChild(tile);
+    column.appendChild(tile);
+
+    const example = EXAMPLES[diagramType.id];
+
+    if (example) {
+      const link = document.createElement('a');
+
+      link.className = 'example';
+      link.href = `?src=${ example }`;
+      link.textContent = 'Load example';
+      link.addEventListener('click', event => {
+        event.preventDefault();
+
+        openURL(example);
+      });
+
+      column.appendChild(link);
+    }
+
+    tiles.appendChild(column);
 
     const xml = PREVIEWS[diagramType.id];
 
@@ -313,6 +345,19 @@ document.body.addEventListener('drop', async (event) => {
   }
 });
 
+/**
+ * @param {string} url of a model
+ */
+async function openURL(url) {
+  const response = await fetch(url);
+
+  if (response.ok) {
+    await openXML(await response.text(), url.split('/').pop());
+  } else {
+    console.error(`failed to load ${ url }: ${ response.status }`);
+  }
+}
+
 // for debugging
 window.modeler = modeler;
 
@@ -325,11 +370,5 @@ createStartScreen().then(async () => {
     return;
   }
 
-  const response = await fetch(src);
-
-  if (response.ok) {
-    await openXML(await response.text(), src.split('/').pop());
-  } else {
-    console.error(`failed to load ${ src }: ${ response.status }`);
-  }
+  await openURL(src);
 });
