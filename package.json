@@ -1,5 +1,5 @@
 {
-  "name": "uml-js",
+  "name": "@uml-js/uml-js",
   "version": "0.1.0",
   "description": "A bpmn-js like UML editor that reads and writes UML 2.5.1 XMI with UML DI",
   "type": "module",
