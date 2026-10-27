@@ -158,6 +158,11 @@
           "isMany": true
         },
         {
+          "name": "ownedOperation",
+          "type": "Operation",
+          "isMany": true
+        },
+        {
           "name": "ownedConnector",
           "type": "Connector",
           "isMany": true
@@ -206,6 +211,36 @@
           "name": "ownedAttribute",
           "type": "Property",
           "isMany": true
+        },
+        {
+          "name": "ownedOperation",
+          "type": "Operation",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "MultiplicityElement",
+      "isAbstract": true,
+      "superClass": [
+        "uml:Element"
+      ],
+      "properties": [
+        {
+          "name": "isOrdered",
+          "type": "Boolean"
+        },
+        {
+          "name": "isUnique",
+          "type": "Boolean"
+        },
+        {
+          "name": "lowerValue",
+          "type": "ValueSpecification"
+        },
+        {
+          "name": "upperValue",
+          "type": "ValueSpecification"
         }
       ]
     },
@@ -233,7 +268,8 @@
     {
       "name": "Property",
       "superClass": [
-        "ConnectableElement"
+        "ConnectableElement",
+        "MultiplicityElement"
       ],
       "properties": [
         {
@@ -256,7 +292,96 @@
           "name": "association",
           "type": "Association",
           "isReference": true
+        },
+        {
+          "name": "defaultValue",
+          "type": "ValueSpecification"
         }
+      ]
+    },
+    {
+      "name": "Operation",
+      "superClass": [
+        "Namespace"
+      ],
+      "properties": [
+        {
+          "name": "isAbstract",
+          "type": "Boolean"
+        },
+        {
+          "name": "isStatic",
+          "type": "Boolean"
+        },
+        {
+          "name": "isQuery",
+          "type": "Boolean"
+        },
+        {
+          "name": "ownedParameter",
+          "type": "Parameter",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "Parameter",
+      "superClass": [
+        "ConnectableElement",
+        "MultiplicityElement"
+      ],
+      "properties": [
+        {
+          "name": "direction",
+          "type": "ParameterDirectionKind"
+        },
+        {
+          "name": "defaultValue",
+          "type": "ValueSpecification"
+        }
+      ]
+    },
+    {
+      "name": "DataType",
+      "superClass": [
+        "Classifier"
+      ],
+      "properties": [
+        {
+          "name": "ownedAttribute",
+          "type": "Property",
+          "isMany": true
+        },
+        {
+          "name": "ownedOperation",
+          "type": "Operation",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "PrimitiveType",
+      "superClass": [
+        "DataType"
+      ]
+    },
+    {
+      "name": "Enumeration",
+      "superClass": [
+        "DataType"
+      ],
+      "properties": [
+        {
+          "name": "ownedLiteral",
+          "type": "EnumerationLiteral",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "EnumerationLiteral",
+      "superClass": [
+        "NamedElement"
       ]
     },
     {
@@ -1048,6 +1173,30 @@
           "isMany": true
         }
       ]
+    },
+    {
+      "name": "LiteralInteger",
+      "superClass": [
+        "ValueSpecification"
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "type": "Integer"
+        }
+      ]
+    },
+    {
+      "name": "LiteralUnlimitedNatural",
+      "superClass": [
+        "ValueSpecification"
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "type": "String"
+        }
+      ]
     }
   ],
   "enumerations": [
@@ -1192,6 +1341,23 @@
         },
         {
           "name": "consider"
+        }
+      ]
+    },
+    {
+      "name": "ParameterDirectionKind",
+      "literalValues": [
+        {
+          "name": "in"
+        },
+        {
+          "name": "inout"
+        },
+        {
+          "name": "out"
+        },
+        {
+          "name": "return"
         }
       ]
     }

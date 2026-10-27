@@ -9,6 +9,7 @@ import createToolbar, {
 import { DIAGRAM_TYPES, UmlModeler, UmlModdle } from '../lib/uml.js';
 
 import stateMachinePreviewXML from './previews/state-machine.uml?raw';
+import classPreviewXML from './previews/class.uml?raw';
 import componentPreviewXML from './previews/component.uml?raw';
 import sequencePreviewXML from './previews/sequence.uml?raw';
 import activityPreviewXML from './previews/activity.uml?raw';
@@ -17,6 +18,7 @@ import useCasePreviewXML from './previews/use-case.uml?raw';
 // small models shown on the start screen, by diagram type
 const PREVIEWS = {
   'state-machine': stateMachinePreviewXML,
+  'class': classPreviewXML,
   'component': componentPreviewXML,
   'sequence': sequencePreviewXML,
   'activity': activityPreviewXML,
@@ -26,6 +28,7 @@ const PREVIEWS = {
 // examples, published along with the app (see .github/workflows/deploy.yml)
 const EXAMPLES = {
   'state-machine': 'examples/state-machine/door.uml',
+  'class': 'examples/class/bank.uml',
   'component': 'examples/component/webshop.uml',
   'sequence': 'examples/sequence/login.uml',
   'activity': 'examples/activity/order.uml',

@@ -11,7 +11,7 @@ Try it at https://uml-js.github.io/uml-js/.
 
 | Diagram type | Category | UML DI | Supported | Example |
 |---|---|---|:---:|---|
-| Class | Structure | `UMLClassDiagram` | | |
+| Class | Structure | `UMLClassDiagram` | ✓ | [bank.uml](https://uml-js.github.io/uml-js/?src=examples/class/bank.uml) |
 | Object | Structure | `UMLObjectDiagram` | | |
 | Package | Structure | `UMLPackageDiagram` | | |
 | Component | Structure | `UMLComponentDiagram` | ✓ | [webshop.uml](https://uml-js.github.io/uml-js/?src=examples/component/webshop.uml) |

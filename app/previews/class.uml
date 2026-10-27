@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="Model_1" name="Preview">
+    <packagedElement xmi:type="uml:Class" xmi:id="Shape" name="Shape" isAbstract="true">
+      <ownedAttribute xmi:id="Shape_x" name="x" visibility="private" type="Real"/>
+      <ownedAttribute xmi:id="Shape_y" name="y" visibility="private" type="Real"/>
+      <ownedOperation xmi:id="Shape_area" name="area" visibility="public">
+        <ownedParameter xmi:id="Shape_area_result" type="Real" direction="return"/>
+      </ownedOperation>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="Circle" name="Circle">
+      <generalization xmi:id="g1" general="Shape"/>
+      <ownedAttribute xmi:id="Circle_r" name="r" visibility="private" type="Real"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="Real" name="Real"/>
+  </uml:Model>
+  <umldi:UMLClassDiagram xmi:id="ClassDiagram_1" name="Preview" modelElement="Model_1">
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Shape_di" modelElement="Shape">
+      <bounds x="40" y="30" width="160" height="100"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Circle_di" modelElement="Circle">
+      <bounds x="260" y="30" width="160" height="68"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="g1_di" source="Circle_di" target="Shape_di" modelElement="g1">
+      <waypoint x="260" y="64"/>
+      <waypoint x="200" y="64"/>
+    </ownedElement>
+  </umldi:UMLClassDiagram>
+</xmi:XMI>

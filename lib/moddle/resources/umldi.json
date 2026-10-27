@@ -186,6 +186,12 @@
       ]
     },
     {
+      "name": "UMLClassDiagram",
+      "superClass": [
+        "UMLStructureDiagram"
+      ]
+    },
+    {
       "name": "UMLComponentDiagram",
       "superClass": [
         "UMLStructureDiagram"

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="Model_1" name="Bank">
+    <packagedElement xmi:type="uml:Class" xmi:id="Bank" name="Bank">
+      <ownedAttribute xmi:id="Bank_name" name="name" visibility="private" type="String"/>
+      <ownedOperation xmi:id="Bank_open" name="open" visibility="public">
+        <ownedParameter xmi:id="Bank_open_holder" name="holder" type="Customer"/>
+        <ownedParameter xmi:id="Bank_open_type" name="type" type="AccountType"/>
+        <ownedParameter xmi:id="Bank_open_result" type="Account" direction="return"/>
+      </ownedOperation>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="Account" name="Account" isAbstract="true">
+      <ownedAttribute xmi:id="Account_number" name="number" visibility="private" type="String"/>
+      <ownedAttribute xmi:id="Account_balance" name="balance" visibility="protected" type="Real">
+        <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="Account_balance_default">
+          <body>0</body>
+        </defaultValue>
+      </ownedAttribute>
+      <ownedOperation xmi:id="Account_deposit" name="deposit" visibility="public">
+        <ownedParameter xmi:id="Account_deposit_amount" name="amount" type="Real"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="Account_withdraw" name="withdraw" visibility="public">
+        <ownedParameter xmi:id="Account_withdraw_amount" name="amount" type="Real"/>
+        <ownedParameter xmi:id="Account_withdraw_result" type="Boolean" direction="return"/>
+      </ownedOperation>
+      <interfaceRealization xmi:id="realizes" client="Account" supplier="Auditable" contract="Auditable"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="Customer" name="Customer">
+      <ownedAttribute xmi:id="Customer_name" name="name" visibility="private" type="String"/>
+      <ownedAttribute xmi:id="Customer_email" name="email" visibility="private" type="String"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Interface" xmi:id="Auditable" name="Auditable">
+      <ownedOperation xmi:id="Auditable_audit" name="audit" visibility="public">
+        <ownedParameter xmi:id="Auditable_audit_result" type="String" direction="return"/>
+      </ownedOperation>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="Savings" name="SavingsAccount">
+      <generalization xmi:id="g1" general="Account"/>
+      <ownedAttribute xmi:id="Savings_rate" name="rate" visibility="private" type="Real">
+        <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="Savings_rate_default">
+          <body>$r \leq 0.05$</body>
+        </defaultValue>
+      </ownedAttribute>
+      <ownedOperation xmi:id="Savings_addInterest" name="addInterest" visibility="public"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="Checking" name="CheckingAccount">
+      <generalization xmi:id="g2" general="Account"/>
+      <ownedAttribute xmi:id="Checking_overdraft" name="overdraft" visibility="private" type="Real"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Enumeration" xmi:id="AccountType" name="AccountType">
+      <ownedLiteral xmi:id="AccountType_SAVINGS" name="SAVINGS"/>
+      <ownedLiteral xmi:id="AccountType_CHECKING" name="CHECKING"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="String" name="String"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="Real" name="Real"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="Boolean" name="Boolean"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="owns" memberEnd="owns_source owns_target">
+      <ownedEnd xmi:id="owns_source" type="Bank" association="owns">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="owns_source_lower" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="owns_source_upper" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="owns_target" name="accounts" type="Account" aggregation="composite" association="owns">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="owns_target_lower" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="owns_target_upper" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="holds" memberEnd="holds_source holds_target">
+      <ownedEnd xmi:id="holds_source" name="holders" type="Customer" association="holds">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="holds_source_lower" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="holds_source_upper" value="*"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="holds_target" type="Account" association="holds">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="holds_target_lower" value="0"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="holds_target_upper" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+  </uml:Model>
+  <umldi:UMLClassDiagram xmi:id="ClassDiagram_1" name="Bank" modelElement="Model_1">
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Bank_di" modelElement="Bank">
+      <bounds x="40" y="40" width="308" height="84"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Account_di" modelElement="Account">
+      <bounds x="460" y="40" width="204" height="116"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Customer_di" modelElement="Customer">
+      <bounds x="860" y="40" width="160" height="84"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Auditable_di" modelElement="Auditable">
+      <bounds x="80" y="300" width="160" height="84"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Savings_di" modelElement="Savings">
+      <bounds x="380" y="320" width="160" height="84"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Checking_di" modelElement="Checking">
+      <bounds x="640" y="320" width="160" height="68"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="AccountType_di" modelElement="AccountType">
+      <bounds x="900" y="300" width="160" height="88"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="owns_di" source="Bank_di" target="Account_di" modelElement="owns">
+      <waypoint x="348" y="82"/>
+      <waypoint x="460" y="82"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="owns_source_label" modelElement="owns_source">
+        <bounds x="354" y="64" width="30" height="15"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="owns_target_label" modelElement="owns_target">
+        <bounds x="397" y="64" width="57" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="holds_di" source="Customer_di" target="Account_di" modelElement="holds">
+      <waypoint x="860" y="82"/>
+      <waypoint x="664" y="82"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="holds_source_label" modelElement="holds_source">
+        <bounds x="793" y="64" width="61" height="15"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="holds_target_label" modelElement="holds_target">
+        <bounds x="670" y="64" width="30" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="realizes_di" source="Account_di" target="Auditable_di" modelElement="realizes">
+      <waypoint x="460" y="140"/>
+      <waypoint x="160" y="140"/>
+      <waypoint x="160" y="300"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="g1_di" source="Savings_di" target="Account_di" modelElement="g1">
+      <waypoint x="460" y="320"/>
+      <waypoint x="460" y="238"/>
+      <waypoint x="562" y="238"/>
+      <waypoint x="562" y="156"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="g2_di" source="Checking_di" target="Account_di" modelElement="g2">
+      <waypoint x="720" y="320"/>
+      <waypoint x="720" y="238"/>
+      <waypoint x="562" y="238"/>
+      <waypoint x="562" y="156"/>
+    </ownedElement>
+  </umldi:UMLClassDiagram>
+</xmi:XMI>

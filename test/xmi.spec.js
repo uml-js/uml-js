@@ -244,3 +244,40 @@ describe('moddle - XMI use case diagrams', function() {
   });
 
 });
+
+
+describe('moddle - XMI class diagrams', function() {
+
+  const bankXML = readFileSync(new URL('../examples/class/bank.uml', import.meta.url), 'utf8');
+
+  it('should read and round-trip', async function() {
+    const moddle = new UmlModdle();
+
+    const { document, warnings } = await moddle.fromXML(bankXML);
+
+    expect(warnings).toEqual([]);
+
+    const [ model ] = document.getElements('uml:Model');
+
+    const account = model.packagedElement.find(e => e.id === 'Account');
+
+    expect(account.isAbstract).toBe(true);
+    expect(account.ownedAttribute.map(a => a.name + ':' + a.type.name)).toEqual([ 'number:String', 'balance:Real' ]);
+    expect(account.ownedOperation[1].ownedParameter.map(p => p.direction || 'in')).toEqual([ 'in', 'return' ]);
+    expect(account.interfaceRealization[0].contract.id).toBe('Auditable');
+
+    const owns = model.packagedElement.find(e => e.id === 'owns');
+
+    expect(owns.memberEnd.map(end => end.type.id)).toEqual([ 'Bank', 'Account' ]);
+    expect(owns.memberEnd[1].aggregation).toBe('composite');
+    expect(owns.memberEnd[1].upperValue.value).toBe('*');
+
+    expect(model.packagedElement.find(e => e.id === 'AccountType').ownedLiteral.map(l => l.name)).toEqual([ 'SAVINGS', 'CHECKING' ]);
+
+    const { xml } = await moddle.toXML(document);
+    const { document: reimported } = await moddle.fromXML(xml);
+
+    expect((await moddle.toXML(reimported)).xml).toBe(xml);
+  });
+
+});
