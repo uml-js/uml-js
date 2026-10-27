@@ -1,5 +1,3 @@
-<img src="assets/uml-js-logo.svg" alt="UML.js" width="120">
-
 # UML.js
 
 A web-based modeler for UML diagrams. Models are stored as **UML 2.5.1 XMI**, with the
