@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <title>UML.js</title>
+  <rect width="512" height="512" rx="64" fill="#ffffff"/>
+  <rect x="44" y="284" width="294" height="135" fill="#696969"/>
+  <g transform="translate(256 0) scale(0.85 1) translate(-256 0)"
+     font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="800" fill="#000000">
+    <text x="-7.5" y="265" font-size="243">UML</text>
+    <text x="519.5" y="390" font-size="146" text-anchor="end" fill="#696969">.js</text>
+  </g>
+</svg>

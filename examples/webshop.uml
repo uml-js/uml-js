@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="model" name="WebShop">
+    <packagedElement xmi:type="uml:Component" xmi:id="Shop" name="Shop">
+      <ownedAttribute xmi:type="uml:Port" xmi:id="p_web" name="web"/>
+      <ownedConnector xmi:id="c_web">
+        <end xmi:id="c_web_end1" role="p_web"/>
+        <end xmi:id="c_web_end2" role="cat_in"/>
+      </ownedConnector>
+      <interfaceRealization xmi:id="r_orders" client="Shop" supplier="IOrders" contract="IOrders"/>
+      <packagedElement xmi:type="uml:Component" xmi:id="Catalog" name="Catalog">
+        <ownedAttribute xmi:type="uml:Port" xmi:id="cat_in" name="in"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Component" xmi:id="Checkout" name="Checkout"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="d_checkout" client="Checkout" supplier="Catalog"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Component" xmi:id="PaymentService" name="PaymentService">
+      <interfaceRealization xmi:id="r_payment" client="PaymentService" supplier="IPayment" contract="IPayment"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Interface" xmi:id="IPayment" name="IPayment"/>
+    <packagedElement xmi:type="uml:Interface" xmi:id="IOrders" name="IOrders"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="u_payment" client="Shop" supplier="IPayment"/>
+  </uml:Model>
+  <umldi:UMLComponentDiagram xmi:id="WebShop_diagram" name="WebShop" modelElement="model">
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Shop_di" modelElement="Shop">
+      <bounds x="100" y="100" width="420" height="260"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="p_web_di" modelElement="p_web">
+        <bounds x="92" y="222" width="16" height="16"/>
+        <ownedElement xmi:type="umldi:UMLLabel" xmi:id="p_web_label" modelElement="p_web">
+          <bounds x="70" y="242" width="30" height="15"/>
+        </ownedElement>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Catalog_di" modelElement="Catalog">
+        <bounds x="150" y="190" width="150" height="80"/>
+        <ownedElement xmi:type="umldi:UMLShape" xmi:id="cat_in_di" modelElement="cat_in">
+          <bounds x="142" y="222" width="16" height="16"/>
+        </ownedElement>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Checkout_di" modelElement="Checkout">
+        <bounds x="340" y="190" width="150" height="80"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="PaymentService_di" modelElement="PaymentService">
+      <bounds x="700" y="150" width="150" height="80"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="IPayment_di" modelElement="IPayment" isIcon="true">
+      <bounds x="600" y="180" width="20" height="20"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="IPayment_label" modelElement="IPayment">
+        <bounds x="580" y="206" width="60" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="IOrders_di" modelElement="IOrders">
+      <bounds x="300" y="430" width="130" height="60"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="c_web_di" modelElement="c_web" source="p_web_di" target="cat_in_di">
+      <waypoint x="108" y="230"/>
+      <waypoint x="142" y="230"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="d_checkout_di" modelElement="d_checkout" source="Checkout_di" target="Catalog_di">
+      <waypoint x="340" y="230"/>
+      <waypoint x="300" y="230"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="u_payment_di" modelElement="u_payment" source="Shop_di" target="IPayment_di">
+      <waypoint x="520" y="190"/>
+      <waypoint x="600" y="190"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="r_payment_di" modelElement="r_payment" source="PaymentService_di" target="IPayment_di">
+      <waypoint x="700" y="190"/>
+      <waypoint x="620" y="190"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="r_orders_di" modelElement="r_orders" source="Shop_di" target="IOrders_di">
+      <waypoint x="365" y="360"/>
+      <waypoint x="365" y="430"/>
+    </ownedElement>
+  </umldi:UMLComponentDiagram>
+</xmi:XMI>

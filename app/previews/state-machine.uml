@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="model" name="Preview">
+    <packagedElement xmi:type="uml:StateMachine" xmi:id="sm" name="Machine">
+      <region xmi:id="region">
+        <subvertex xmi:type="uml:Pseudostate" xmi:id="initial" kind="initial"/>
+        <subvertex xmi:type="uml:State" xmi:id="Idle" name="Idle"/>
+        <subvertex xmi:type="uml:State" xmi:id="Running" name="Running"/>
+        <subvertex xmi:type="uml:FinalState" xmi:id="final"/>
+        <transition xmi:id="t1" source="initial" target="Idle"/>
+        <transition xmi:id="t2" source="Idle" target="Running">
+          <trigger xmi:id="t2_trigger" name="start"/>
+        </transition>
+        <transition xmi:id="t4" source="Running" target="Idle">
+          <trigger xmi:id="t4_trigger" name="pause"/>
+        </transition>
+        <transition xmi:id="t3" source="Running" target="final">
+          <trigger xmi:id="t3_trigger" name="stop"/>
+        </transition>
+      </region>
+    </packagedElement>
+  </uml:Model>
+  <umldi:UMLStateMachineDiagram xmi:id="diagram" name="Machine" modelElement="sm">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="initial_di" modelElement="initial">
+      <bounds x="20" y="52" width="24" height="24"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLStateShape" xmi:id="Idle_di" modelElement="Idle">
+      <bounds x="80" y="34" width="100" height="60"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLStateShape" xmi:id="Running_di" modelElement="Running">
+      <bounds x="250" y="34" width="100" height="60"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="final_di" modelElement="final">
+      <bounds x="410" y="49" width="30" height="30"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="t1_di" modelElement="t1" source="initial_di" target="Idle_di">
+      <waypoint x="44" y="64"/>
+      <waypoint x="80" y="64"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="t2_di" modelElement="t2" source="Idle_di" target="Running_di">
+      <waypoint x="180" y="64"/>
+      <waypoint x="250" y="64"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="t2_label" modelElement="t2">
+        <bounds x="200" y="44" width="30" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="t3_di" modelElement="t3" source="Running_di" target="final_di">
+      <waypoint x="350" y="64"/>
+      <waypoint x="410" y="64"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="t3_label" modelElement="t3">
+        <bounds x="365" y="44" width="30" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="t4_di" modelElement="t4" source="Running_di" target="Idle_di">
+      <waypoint x="300" y="94"/>
+      <waypoint x="300" y="124"/>
+      <waypoint x="130" y="124"/>
+      <waypoint x="130" y="94"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="t4_label" modelElement="t4">
+        <bounds x="198" y="128" width="34" height="15"/>
+      </ownedElement>
+    </ownedElement>
+  </umldi:UMLStateMachineDiagram>
+</xmi:XMI>

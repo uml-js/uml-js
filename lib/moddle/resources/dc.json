@@ -1,0 +1,24 @@
+{
+  "name": "DC",
+  "uri": "http://www.omg.org/spec/DD/20131001/DC",
+  "prefix": "dc",
+  "types": [
+    {
+      "name": "Bounds",
+      "properties": [
+        { "name": "x", "type": "Real", "default": 0 },
+        { "name": "y", "type": "Real", "default": 0 },
+        { "name": "width", "type": "Real" },
+        { "name": "height", "type": "Real" }
+      ]
+    },
+    {
+      "name": "Point",
+      "properties": [
+        { "name": "x", "type": "Real", "default": 0 },
+        { "name": "y", "type": "Real", "default": 0 }
+      ]
+    }
+  ],
+  "enumerations": []
+}

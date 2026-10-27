@@ -1,0 +1,202 @@
+{
+  "name": "UMLDI",
+  "uri": "http://www.omg.org/spec/UML/20161101/UMLDI",
+  "prefix": "umldi",
+  "types": [
+    {
+      "name": "UMLDiagramElement",
+      "isAbstract": true,
+      "superClass": [
+        "di:DiagramElement"
+      ],
+      "properties": [
+        {
+          "name": "isIcon",
+          "type": "Boolean"
+        },
+        {
+          "name": "modelElement",
+          "type": "uml:Element",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "ownedElement",
+          "type": "UMLDiagramElement",
+          "isMany": true
+        },
+        {
+          "name": "sharedStyle",
+          "type": "UMLStyle",
+          "isReference": true
+        },
+        {
+          "name": "localStyle",
+          "type": "UMLStyle"
+        }
+      ]
+    },
+    {
+      "name": "UMLShape",
+      "superClass": [
+        "di:Shape",
+        "UMLDiagramElement"
+      ]
+    },
+    {
+      "name": "UMLEdge",
+      "superClass": [
+        "di:Edge",
+        "UMLDiagramElement"
+      ]
+    },
+    {
+      "name": "UMLLabel",
+      "superClass": [
+        "UMLShape"
+      ],
+      "properties": [
+        {
+          "name": "text",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "UMLNameLabel",
+      "superClass": [
+        "UMLLabel"
+      ]
+    },
+    {
+      "name": "UMLKeywordLabel",
+      "superClass": [
+        "UMLLabel"
+      ]
+    },
+    {
+      "name": "UMLCompartment",
+      "superClass": [
+        "UMLDiagramElement"
+      ]
+    },
+    {
+      "name": "UMLCompartmentableShape",
+      "superClass": [
+        "UMLShape"
+      ],
+      "properties": [
+        {
+          "name": "compartment",
+          "type": "UMLCompartment",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "UMLStateShape",
+      "superClass": [
+        "UMLCompartmentableShape"
+      ],
+      "properties": [
+        {
+          "name": "isTabbed",
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
+      "name": "UMLDiagram",
+      "isAbstract": true,
+      "superClass": [
+        "di:Diagram",
+        "UMLDiagramElement"
+      ],
+      "properties": [
+        {
+          "name": "isFrame",
+          "type": "Boolean"
+        },
+        {
+          "name": "isIso",
+          "type": "Boolean"
+        },
+        {
+          "name": "heading",
+          "type": "UMLLabel"
+        }
+      ]
+    },
+    {
+      "name": "UMLBehaviorDiagram",
+      "isAbstract": true,
+      "superClass": [
+        "UMLDiagram"
+      ]
+    },
+    {
+      "name": "UMLStateMachineDiagram",
+      "superClass": [
+        "UMLBehaviorDiagram"
+      ],
+      "properties": [
+        {
+          "name": "isInheritedDashed",
+          "type": "Boolean"
+        },
+        {
+          "name": "isTransitionOriented",
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
+      "name": "UMLClassifierShape",
+      "superClass": [
+        "UMLCompartmentableShape"
+      ],
+      "properties": [
+        {
+          "name": "isDoubleSided",
+          "type": "Boolean"
+        },
+        {
+          "name": "isIndentForVisibility",
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
+      "name": "UMLStructureDiagram",
+      "isAbstract": true,
+      "superClass": [
+        "UMLDiagram"
+      ]
+    },
+    {
+      "name": "UMLComponentDiagram",
+      "superClass": [
+        "UMLStructureDiagram"
+      ]
+    },
+    {
+      "name": "UMLStyle",
+      "properties": [
+        {
+          "name": "id",
+          "type": "String",
+          "isId": true
+        },
+        {
+          "name": "fontName",
+          "type": "String"
+        },
+        {
+          "name": "fontSize",
+          "type": "Real"
+        }
+      ]
+    }
+  ],
+  "enumerations": []
+}

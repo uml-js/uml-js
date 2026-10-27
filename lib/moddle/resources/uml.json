@@ -1,0 +1,665 @@
+{
+  "name": "UML",
+  "uri": "http://www.omg.org/spec/UML/20161101",
+  "prefix": "uml",
+  "types": [
+    {
+      "name": "Element",
+      "isAbstract": true,
+      "properties": [
+        {
+          "name": "id",
+          "type": "String",
+          "isId": true
+        },
+        {
+          "name": "ownedComment",
+          "type": "Comment",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "Comment",
+      "superClass": [
+        "uml:Element"
+      ],
+      "properties": [
+        {
+          "name": "body",
+          "type": "String"
+        },
+        {
+          "name": "annotatedElement",
+          "type": "uml:Element",
+          "isMany": true,
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "NamedElement",
+      "isAbstract": true,
+      "superClass": [
+        "uml:Element"
+      ],
+      "properties": [
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "visibility",
+          "type": "VisibilityKind"
+        }
+      ]
+    },
+    {
+      "name": "PackageableElement",
+      "isAbstract": true,
+      "superClass": [
+        "NamedElement"
+      ]
+    },
+    {
+      "name": "Namespace",
+      "isAbstract": true,
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "ownedRule",
+          "type": "Constraint",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "Package",
+      "superClass": [
+        "Namespace",
+        "PackageableElement"
+      ],
+      "properties": [
+        {
+          "name": "URI",
+          "type": "String"
+        },
+        {
+          "name": "packagedElement",
+          "type": "PackageableElement",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "Model",
+      "superClass": [
+        "Package"
+      ],
+      "properties": [
+        {
+          "name": "viewpoint",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "Type",
+      "isAbstract": true,
+      "superClass": [
+        "PackageableElement"
+      ]
+    },
+    {
+      "name": "Classifier",
+      "isAbstract": true,
+      "superClass": [
+        "Namespace",
+        "Type"
+      ],
+      "properties": [
+        {
+          "name": "isAbstract",
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
+      "name": "Class",
+      "superClass": [
+        "Classifier"
+      ],
+      "properties": [
+        {
+          "name": "isActive",
+          "type": "Boolean"
+        },
+        {
+          "name": "ownedAttribute",
+          "type": "Property",
+          "isMany": true
+        },
+        {
+          "name": "ownedConnector",
+          "type": "Connector",
+          "isMany": true
+        },
+        {
+          "name": "ownedBehavior",
+          "type": "Behavior",
+          "isMany": true
+        },
+        {
+          "name": "classifierBehavior",
+          "type": "Behavior",
+          "isReference": true
+        },
+        {
+          "name": "interfaceRealization",
+          "type": "InterfaceRealization",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "Component",
+      "superClass": [
+        "Class"
+      ],
+      "properties": [
+        {
+          "name": "isIndirectlyInstantiated",
+          "type": "Boolean"
+        },
+        {
+          "name": "packagedElement",
+          "type": "PackageableElement",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "Interface",
+      "superClass": [
+        "Classifier"
+      ],
+      "properties": [
+        {
+          "name": "ownedAttribute",
+          "type": "Property",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "TypedElement",
+      "isAbstract": true,
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "type",
+          "type": "Type",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "ConnectableElement",
+      "isAbstract": true,
+      "superClass": [
+        "TypedElement"
+      ]
+    },
+    {
+      "name": "Property",
+      "superClass": [
+        "ConnectableElement"
+      ],
+      "properties": [
+        {
+          "name": "aggregation",
+          "type": "AggregationKind"
+        },
+        {
+          "name": "isDerived",
+          "type": "Boolean"
+        },
+        {
+          "name": "isReadOnly",
+          "type": "Boolean"
+        },
+        {
+          "name": "isStatic",
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
+      "name": "Port",
+      "superClass": [
+        "Property"
+      ],
+      "properties": [
+        {
+          "name": "isBehavior",
+          "type": "Boolean"
+        },
+        {
+          "name": "isConjugated",
+          "type": "Boolean"
+        },
+        {
+          "name": "isService",
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
+      "name": "Connector",
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "end",
+          "type": "ConnectorEnd",
+          "isMany": true
+        },
+        {
+          "name": "type",
+          "type": "Type",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "ConnectorEnd",
+      "superClass": [
+        "uml:Element"
+      ],
+      "properties": [
+        {
+          "name": "role",
+          "type": "ConnectableElement",
+          "isReference": true
+        },
+        {
+          "name": "partWithPort",
+          "type": "Property",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "Dependency",
+      "superClass": [
+        "PackageableElement"
+      ],
+      "properties": [
+        {
+          "name": "client",
+          "type": "NamedElement",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "supplier",
+          "type": "NamedElement",
+          "isMany": true,
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "Usage",
+      "superClass": [
+        "Dependency"
+      ]
+    },
+    {
+      "name": "Abstraction",
+      "superClass": [
+        "Dependency"
+      ]
+    },
+    {
+      "name": "Realization",
+      "superClass": [
+        "Abstraction"
+      ]
+    },
+    {
+      "name": "InterfaceRealization",
+      "superClass": [
+        "Realization"
+      ],
+      "properties": [
+        {
+          "name": "contract",
+          "type": "Interface",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "Behavior",
+      "isAbstract": true,
+      "superClass": [
+        "Class"
+      ],
+      "properties": [
+        {
+          "name": "isReentrant",
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
+      "name": "OpaqueBehavior",
+      "superClass": [
+        "Behavior"
+      ],
+      "properties": [
+        {
+          "name": "body",
+          "type": "String",
+          "isMany": true
+        },
+        {
+          "name": "language",
+          "type": "String",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "StateMachine",
+      "superClass": [
+        "Behavior"
+      ],
+      "properties": [
+        {
+          "name": "region",
+          "type": "Region",
+          "isMany": true
+        },
+        {
+          "name": "connectionPoint",
+          "type": "Pseudostate",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "Region",
+      "superClass": [
+        "Namespace"
+      ],
+      "properties": [
+        {
+          "name": "subvertex",
+          "type": "Vertex",
+          "isMany": true
+        },
+        {
+          "name": "transition",
+          "type": "Transition",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "Vertex",
+      "isAbstract": true,
+      "superClass": [
+        "NamedElement"
+      ]
+    },
+    {
+      "name": "State",
+      "superClass": [
+        "Namespace",
+        "Vertex"
+      ],
+      "properties": [
+        {
+          "name": "region",
+          "type": "Region",
+          "isMany": true
+        },
+        {
+          "name": "connectionPoint",
+          "type": "Pseudostate",
+          "isMany": true
+        },
+        {
+          "name": "entry",
+          "type": "Behavior"
+        },
+        {
+          "name": "doActivity",
+          "type": "Behavior"
+        },
+        {
+          "name": "exit",
+          "type": "Behavior"
+        },
+        {
+          "name": "stateInvariant",
+          "type": "Constraint",
+          "isReference": true
+        },
+        {
+          "name": "submachine",
+          "type": "StateMachine",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "FinalState",
+      "superClass": [
+        "State"
+      ]
+    },
+    {
+      "name": "Pseudostate",
+      "superClass": [
+        "Vertex"
+      ],
+      "properties": [
+        {
+          "name": "kind",
+          "type": "PseudostateKind",
+          "default": "initial"
+        }
+      ]
+    },
+    {
+      "name": "Transition",
+      "superClass": [
+        "Namespace"
+      ],
+      "properties": [
+        {
+          "name": "kind",
+          "type": "TransitionKind",
+          "default": "external"
+        },
+        {
+          "name": "source",
+          "type": "Vertex",
+          "isReference": true
+        },
+        {
+          "name": "target",
+          "type": "Vertex",
+          "isReference": true
+        },
+        {
+          "name": "trigger",
+          "type": "Trigger",
+          "isMany": true
+        },
+        {
+          "name": "guard",
+          "type": "Constraint",
+          "isReference": true
+        },
+        {
+          "name": "effect",
+          "type": "Behavior"
+        }
+      ]
+    },
+    {
+      "name": "Trigger",
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "event",
+          "type": "Event",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "Event",
+      "isAbstract": true,
+      "superClass": [
+        "PackageableElement"
+      ]
+    },
+    {
+      "name": "Constraint",
+      "superClass": [
+        "PackageableElement"
+      ],
+      "properties": [
+        {
+          "name": "constrainedElement",
+          "type": "uml:Element",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "specification",
+          "type": "ValueSpecification"
+        }
+      ]
+    },
+    {
+      "name": "ValueSpecification",
+      "isAbstract": true,
+      "superClass": [
+        "PackageableElement"
+      ]
+    },
+    {
+      "name": "OpaqueExpression",
+      "superClass": [
+        "ValueSpecification"
+      ],
+      "properties": [
+        {
+          "name": "body",
+          "type": "String",
+          "isMany": true
+        },
+        {
+          "name": "language",
+          "type": "String",
+          "isMany": true
+        }
+      ]
+    }
+  ],
+  "enumerations": [
+    {
+      "name": "VisibilityKind",
+      "literalValues": [
+        {
+          "name": "public"
+        },
+        {
+          "name": "private"
+        },
+        {
+          "name": "protected"
+        },
+        {
+          "name": "package"
+        }
+      ]
+    },
+    {
+      "name": "PseudostateKind",
+      "literalValues": [
+        {
+          "name": "initial"
+        },
+        {
+          "name": "deepHistory"
+        },
+        {
+          "name": "shallowHistory"
+        },
+        {
+          "name": "join"
+        },
+        {
+          "name": "fork"
+        },
+        {
+          "name": "junction"
+        },
+        {
+          "name": "choice"
+        },
+        {
+          "name": "entryPoint"
+        },
+        {
+          "name": "exitPoint"
+        },
+        {
+          "name": "terminate"
+        }
+      ]
+    },
+    {
+      "name": "TransitionKind",
+      "literalValues": [
+        {
+          "name": "internal"
+        },
+        {
+          "name": "local"
+        },
+        {
+          "name": "external"
+        }
+      ]
+    },
+    {
+      "name": "AggregationKind",
+      "literalValues": [
+        {
+          "name": "none"
+        },
+        {
+          "name": "shared"
+        },
+        {
+          "name": "composite"
+        }
+      ]
+    }
+  ]
+}

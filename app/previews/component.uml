@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="model" name="Preview">
+    <packagedElement xmi:type="uml:Component" xmi:id="Shop" name="Shop">
+      <interfaceRealization xmi:id="r" client="Shop" supplier="IOrders" contract="IOrders"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Component" xmi:id="Client" name="Client"/>
+    <packagedElement xmi:type="uml:Interface" xmi:id="IOrders" name="IOrders"/>
+    <packagedElement xmi:type="uml:Usage" xmi:id="u" client="Client" supplier="IOrders"/>
+  </uml:Model>
+  <umldi:UMLComponentDiagram xmi:id="diagram" name="Components" modelElement="model">
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Shop_di" modelElement="Shop">
+      <bounds x="20" y="30" width="130" height="70"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="IOrders_di" modelElement="IOrders" isIcon="true">
+      <bounds x="220" y="55" width="20" height="20"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="IOrders_label" modelElement="IOrders">
+        <bounds x="205" y="82" width="50" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Client_di" modelElement="Client">
+      <bounds x="310" y="30" width="130" height="70"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="r_di" modelElement="r" source="Shop_di" target="IOrders_di">
+      <waypoint x="150" y="65"/>
+      <waypoint x="220" y="65"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="u_di" modelElement="u" source="Client_di" target="IOrders_di">
+      <waypoint x="310" y="65"/>
+      <waypoint x="240" y="65"/>
+    </ownedElement>
+  </umldi:UMLComponentDiagram>
+</xmi:XMI>
