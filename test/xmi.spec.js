@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 
 import UmlModdle from '../lib/moddle/index.js';
 
-const doorXML = readFileSync(new URL('../examples/door.uml', import.meta.url), 'utf8');
+const doorXML = readFileSync(new URL('../examples/state-machine/door.uml', import.meta.url), 'utf8');
 
 
 describe('moddle - XMI', function() {
@@ -115,7 +115,7 @@ describe('moddle - XMI', function() {
 
 describe('moddle - XMI component diagrams', function() {
 
-  const webshopXML = readFileSync(new URL('../examples/webshop.uml', import.meta.url), 'utf8');
+  const webshopXML = readFileSync(new URL('../examples/component/webshop.uml', import.meta.url), 'utf8');
 
   it('should read and round-trip', async function() {
     const moddle = new UmlModdle();
@@ -135,6 +135,42 @@ describe('moddle - XMI component diagrams', function() {
     const [ diagram ] = document.getElements('umldi:UMLComponentDiagram');
 
     expect(diagram.ownedElement.find(e => e.id === 'IPayment_di').isIcon).toBe(true);
+
+    const { xml } = await moddle.toXML(document);
+    const { document: reimported } = await moddle.fromXML(xml);
+
+    expect((await moddle.toXML(reimported)).xml).toBe(xml);
+  });
+
+});
+
+
+describe('moddle - XMI sequence diagrams', function() {
+
+  const loginXML = readFileSync(new URL('../examples/sequence/login.uml', import.meta.url), 'utf8');
+
+  it('should read and round-trip', async function() {
+    const moddle = new UmlModdle();
+
+    const { document, warnings } = await moddle.fromXML(loginXML);
+
+    expect(warnings).toEqual([]);
+
+    const [ model ] = document.getElements('uml:Model');
+    const interaction = model.packagedElement[0];
+
+    expect(interaction.$type).toBe('uml:Interaction');
+    expect(interaction.lifeline.map(l => l.id)).toEqual([ 'User', 'WebApp', 'Auth' ]);
+
+    const [ login ] = interaction.message;
+
+    expect(login.sendEvent.covered[0].id).toBe('User');
+    expect(login.receiveEvent.message).toBe(login);
+    expect(interaction.message.find(m => m.id === 'm3').messageSort).toBe('reply');
+
+    const [ diagram ] = document.getElements('umldi:UMLInteractionDiagram');
+
+    expect(diagram.kind).toBe('sequence');
 
     const { xml } = await moddle.toXML(document);
     const { document: reimported } = await moddle.fromXML(xml);

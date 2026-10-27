@@ -377,6 +377,211 @@
       ]
     },
     {
+      "name": "Interaction",
+      "superClass": [
+        "Behavior",
+        "InteractionFragment"
+      ],
+      "properties": [
+        {
+          "name": "lifeline",
+          "type": "Lifeline",
+          "isMany": true
+        },
+        {
+          "name": "fragment",
+          "type": "InteractionFragment",
+          "isMany": true
+        },
+        {
+          "name": "message",
+          "type": "Message",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "InteractionFragment",
+      "isAbstract": true,
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "covered",
+          "type": "Lifeline",
+          "isMany": true,
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "Lifeline",
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "represents",
+          "type": "ConnectableElement",
+          "isReference": true
+        },
+        {
+          "name": "coveredBy",
+          "type": "InteractionFragment",
+          "isMany": true,
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "OccurrenceSpecification",
+      "superClass": [
+        "InteractionFragment"
+      ]
+    },
+    {
+      "name": "MessageEnd",
+      "isAbstract": true,
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "message",
+          "type": "Message",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "MessageOccurrenceSpecification",
+      "superClass": [
+        "OccurrenceSpecification",
+        "MessageEnd"
+      ]
+    },
+    {
+      "name": "ExecutionSpecification",
+      "isAbstract": true,
+      "superClass": [
+        "InteractionFragment"
+      ],
+      "properties": [
+        {
+          "name": "start",
+          "type": "OccurrenceSpecification",
+          "isReference": true
+        },
+        {
+          "name": "finish",
+          "type": "OccurrenceSpecification",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "BehaviorExecutionSpecification",
+      "superClass": [
+        "ExecutionSpecification"
+      ],
+      "properties": [
+        {
+          "name": "behavior",
+          "type": "Behavior",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "ExecutionOccurrenceSpecification",
+      "superClass": [
+        "OccurrenceSpecification"
+      ],
+      "properties": [
+        {
+          "name": "execution",
+          "type": "ExecutionSpecification",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "CombinedFragment",
+      "superClass": [
+        "InteractionFragment"
+      ],
+      "properties": [
+        {
+          "name": "interactionOperator",
+          "type": "InteractionOperatorKind",
+          "default": "seq"
+        },
+        {
+          "name": "operand",
+          "type": "InteractionOperand",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "InteractionOperand",
+      "superClass": [
+        "Namespace",
+        "InteractionFragment"
+      ],
+      "properties": [
+        {
+          "name": "guard",
+          "type": "InteractionConstraint"
+        },
+        {
+          "name": "fragment",
+          "type": "InteractionFragment",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "InteractionConstraint",
+      "superClass": [
+        "Constraint"
+      ],
+      "properties": [
+        {
+          "name": "minint",
+          "type": "ValueSpecification"
+        },
+        {
+          "name": "maxint",
+          "type": "ValueSpecification"
+        }
+      ]
+    },
+    {
+      "name": "Message",
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "messageSort",
+          "type": "MessageSort",
+          "default": "synchCall"
+        },
+        {
+          "name": "sendEvent",
+          "type": "MessageEnd",
+          "isReference": true
+        },
+        {
+          "name": "receiveEvent",
+          "type": "MessageEnd",
+          "isReference": true
+        }
+      ]
+    },
+    {
       "name": "StateMachine",
       "superClass": [
         "Behavior"
@@ -658,6 +863,70 @@
         },
         {
           "name": "composite"
+        }
+      ]
+    },
+    {
+      "name": "MessageSort",
+      "literalValues": [
+        {
+          "name": "synchCall"
+        },
+        {
+          "name": "asynchCall"
+        },
+        {
+          "name": "asynchSignal"
+        },
+        {
+          "name": "createMessage"
+        },
+        {
+          "name": "deleteMessage"
+        },
+        {
+          "name": "reply"
+        }
+      ]
+    },
+    {
+      "name": "InteractionOperatorKind",
+      "literalValues": [
+        {
+          "name": "seq"
+        },
+        {
+          "name": "alt"
+        },
+        {
+          "name": "opt"
+        },
+        {
+          "name": "break"
+        },
+        {
+          "name": "par"
+        },
+        {
+          "name": "strict"
+        },
+        {
+          "name": "loop"
+        },
+        {
+          "name": "critical"
+        },
+        {
+          "name": "neg"
+        },
+        {
+          "name": "assert"
+        },
+        {
+          "name": "ignore"
+        },
+        {
+          "name": "consider"
         }
       ]
     }

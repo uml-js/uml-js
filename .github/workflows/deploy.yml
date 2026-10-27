@@ -31,7 +31,7 @@ jobs:
 
       - run: npm run build
 
-      # make the examples available, e.g. ?src=examples/webshop.uml
+      # make the examples available, e.g. ?src=examples/component/webshop.uml
       - run: cp -r examples dist/examples
 
       - uses: actions/configure-pages@v5

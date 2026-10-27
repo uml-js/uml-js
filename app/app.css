@@ -65,8 +65,12 @@ body {
   font-size: 17px;
   transform: scaleX(0.85);
   color: var(--bpmn-toolbar-icon, rgb(64, 64, 64));
+  text-decoration: none;
   user-select: none;
-  pointer-events: none;
+}
+
+.bpmn-toolbar .watermark:hover {
+  color: var(--bpmn-toolbar-accent, hsl(205, 100%, 45%));
 }
 
 .djs-palette .entry img {

@@ -180,6 +180,19 @@
       ]
     },
     {
+      "name": "UMLInteractionDiagram",
+      "superClass": [
+        "UMLBehaviorDiagram"
+      ],
+      "properties": [
+        {
+          "name": "kind",
+          "type": "UMLInteractionDiagramKind",
+          "default": "sequence"
+        }
+      ]
+    },
+    {
       "name": "UMLStyle",
       "properties": [
         {
@@ -198,5 +211,23 @@
       ]
     }
   ],
-  "enumerations": []
+  "enumerations": [
+    {
+      "name": "UMLInteractionDiagramKind",
+      "literalValues": [
+        {
+          "name": "sequence"
+        },
+        {
+          "name": "communication"
+        },
+        {
+          "name": "overview"
+        },
+        {
+          "name": "timing"
+        }
+      ]
+    }
+  ]
 }

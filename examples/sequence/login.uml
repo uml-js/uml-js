@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="model" name="Login">
+    <packagedElement xmi:type="uml:Interaction" xmi:id="Login" name="Login">
+      <lifeline xmi:id="User" name="user : User" coveredBy="m1_send m4_receive"/>
+      <lifeline xmi:id="WebApp" name="app : WebApp" coveredBy="m1_receive m2_send m3_receive m5_send m5_receive m4_send"/>
+      <lifeline xmi:id="Auth" name="auth : AuthService" coveredBy="m2_receive m3_send"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m1_send" covered="User" message="m1"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m1_receive" covered="WebApp" message="m1"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m2_send" covered="WebApp" message="m2"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m2_receive" covered="Auth" message="m2"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m3_send" covered="Auth" message="m3"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m3_receive" covered="WebApp" message="m3"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m5_send" covered="WebApp" message="m5"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m5_receive" covered="WebApp" message="m5"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m4_send" covered="WebApp" message="m4"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m4_receive" covered="User" message="m4"/>
+      <message xmi:id="m1" name="login(name, password)" sendEvent="m1_send" receiveEvent="m1_receive"/>
+      <message xmi:id="m2" name="verify(name, password)" sendEvent="m2_send" receiveEvent="m2_receive"/>
+      <message xmi:id="m3" name="token" messageSort="reply" sendEvent="m3_send" receiveEvent="m3_receive"/>
+      <message xmi:id="m5" name="storeSession(token)" messageSort="asynchCall" sendEvent="m5_send" receiveEvent="m5_receive"/>
+      <message xmi:id="m4" name="welcome" messageSort="reply" sendEvent="m4_send" receiveEvent="m4_receive"/>
+    </packagedElement>
+  </uml:Model>
+  <umldi:UMLInteractionDiagram xmi:id="Login_diagram" name="Login" modelElement="Login" kind="sequence">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="User_di" modelElement="User">
+      <bounds x="40" y="40" width="120" height="340"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="WebApp_di" modelElement="WebApp">
+      <bounds x="260" y="40" width="120" height="340"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="Auth_di" modelElement="Auth">
+      <bounds x="480" y="40" width="140" height="340"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m1_di" modelElement="m1" source="User_di" target="WebApp_di">
+      <waypoint x="100" y="120"/>
+      <waypoint x="320" y="120"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m1_label" modelElement="m1">
+        <bounds x="150" y="100" width="120" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m2_di" modelElement="m2" source="WebApp_di" target="Auth_di">
+      <waypoint x="320" y="160"/>
+      <waypoint x="550" y="160"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m2_label" modelElement="m2">
+        <bounds x="373" y="140" width="125" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m3_di" modelElement="m3" source="Auth_di" target="WebApp_di">
+      <waypoint x="550" y="200"/>
+      <waypoint x="320" y="200"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m3_label" modelElement="m3">
+        <bounds x="420" y="180" width="35" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m5_di" modelElement="m5" source="WebApp_di" target="WebApp_di">
+      <waypoint x="320" y="240"/>
+      <waypoint x="360" y="240"/>
+      <waypoint x="360" y="260"/>
+      <waypoint x="320" y="260"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m5_label" modelElement="m5">
+        <bounds x="366" y="243" width="110" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m4_di" modelElement="m4" source="WebApp_di" target="User_di">
+      <waypoint x="320" y="300"/>
+      <waypoint x="100" y="300"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m4_label" modelElement="m4">
+        <bounds x="185" y="280" width="50" height="15"/>
+      </ownedElement>
+    </ownedElement>
+  </umldi:UMLInteractionDiagram>
+</xmi:XMI>

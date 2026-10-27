@@ -10,11 +10,13 @@ import { DIAGRAM_TYPES, UmlModeler, UmlModdle } from '../lib/uml.js';
 
 import stateMachinePreviewXML from './previews/state-machine.uml?raw';
 import componentPreviewXML from './previews/component.uml?raw';
+import sequencePreviewXML from './previews/sequence.uml?raw';
 
 // small models shown on the start screen, by diagram type
 const PREVIEWS = {
   'state-machine': stateMachinePreviewXML,
-  'component': componentPreviewXML
+  'component': componentPreviewXML,
+  'sequence': sequencePreviewXML
 };
 
 const PICKER_ID = 'uml-js';
@@ -123,7 +125,8 @@ async function showPreview(container, diagramType, xml) {
 // toolbar //////////
 
 /**
- * The on-canvas file and view toolbar of the BPMN workbench. It is handed a
+ * The on-canvas file and view toolbar of the BPMN workbench, bpmn-js-toolbar
+ * (https://github.com/bpmn-os/bpmn-js-toolbar). It is handed a
  * modeler-like object that delegates to the diagram shown; loading and saving
  * are replaced by versions for UML files.
  *
@@ -162,11 +165,15 @@ const toolbar = createToolbar({
 
 setModelButtonsEnabled(false);
 
-// shown where bpmn-js shows its bpmn.io logo
-const watermark = document.createElement('span');
+// shown where bpmn-js shows its bpmn.io logo, linking to the project
+const watermark = document.createElement('a');
 
 watermark.className = 'watermark';
 watermark.textContent = 'UML.js';
+watermark.href = 'https://github.com/uml-js/uml-js';
+watermark.target = '_blank';
+watermark.rel = 'noopener';
+watermark.title = 'UML.js on GitHub';
 
 toolbar.element.appendChild(watermark);
 

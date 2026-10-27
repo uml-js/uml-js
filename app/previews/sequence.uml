@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="model" name="Preview">
+    <packagedElement xmi:type="uml:Interaction" xmi:id="i" name="Order">
+      <lifeline xmi:id="C" name="client" coveredBy="m1_s m2_r"/>
+      <lifeline xmi:id="S" name="shop" coveredBy="m1_r m2_s"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m1_s" covered="C" message="m1"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m1_r" covered="S" message="m1"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m2_s" covered="S" message="m2"/>
+      <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m2_r" covered="C" message="m2"/>
+      <message xmi:id="m1" name="order()" sendEvent="m1_s" receiveEvent="m1_r"/>
+      <message xmi:id="m2" name="confirmation" messageSort="reply" sendEvent="m2_s" receiveEvent="m2_r"/>
+    </packagedElement>
+  </uml:Model>
+  <umldi:UMLInteractionDiagram xmi:id="d" name="Order" modelElement="i" kind="sequence">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="C_di" modelElement="C">
+      <bounds x="40" y="20" width="100" height="160"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="S_di" modelElement="S">
+      <bounds x="240" y="20" width="100" height="160"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m1_di" modelElement="m1" source="C_di" target="S_di">
+      <waypoint x="90" y="90"/>
+      <waypoint x="290" y="90"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m1_label" modelElement="m1">
+        <bounds x="170" y="70" width="40" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m2_di" modelElement="m2" source="S_di" target="C_di">
+      <waypoint x="290" y="140"/>
+      <waypoint x="90" y="140"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m2_label" modelElement="m2">
+        <bounds x="155" y="120" width="70" height="15"/>
+      </ownedElement>
+    </ownedElement>
+  </umldi:UMLInteractionDiagram>
+</xmi:XMI>
