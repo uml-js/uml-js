@@ -16,7 +16,12 @@
             <subvertex xmi:type="uml:State" xmi:id="Armed" name="Armed"/>
             <subvertex xmi:type="uml:State" xmi:id="Alarm" name="Alarm"/>
             <transition xmi:id="t_locked_init" source="Locked_initial" target="Armed"/>
-            <transition xmi:id="t_alarm" source="Armed" target="Alarm">
+            <transition xmi:id="t_alarm" source="Armed" target="Alarm" guard="t_alarm_guard">
+              <ownedRule xmi:type="uml:Constraint" xmi:id="t_alarm_guard">
+                <specification xmi:type="uml:OpaqueExpression" xmi:id="t_alarm_guard_spec">
+                  <body>$t &gt; t_{\max}$</body>
+                </specification>
+              </ownedRule>
               <trigger xmi:id="t_alarm_trigger" name="forced"/>
             </transition>
           </region>
@@ -123,7 +128,7 @@
       <waypoint x="350" y="425"/>
       <waypoint x="420" y="425"/>
       <ownedElement xmi:type="umldi:UMLLabel" xmi:id="t_alarm_label" modelElement="t_alarm">
-        <bounds x="360" y="400" width="50" height="20"/>
+        <bounds x="330" y="372" width="110" height="20"/>
       </ownedElement>
     </ownedElement>
   </umldi:UMLStateMachineDiagram>

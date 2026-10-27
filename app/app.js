@@ -91,7 +91,7 @@ async function createStartScreen() {
     tile.className = 'tile';
     tile.dataset.type = diagramType.id;
     tile.innerHTML = `<div class="preview"></div><span class="name">${ diagramType.name }</span>`;
-    tile.addEventListener('click', () => openXML(diagramType.createXML(), `${ diagramType.id }.uml`));
+    tile.addEventListener('click', () => openXML(diagramType.createXML(), 'diagram.uml'));
 
     tiles.appendChild(tile);
 

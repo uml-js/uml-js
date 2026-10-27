@@ -16,7 +16,7 @@
       <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m4_send" covered="WebApp" message="m4"/>
       <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="m4_receive" covered="User" message="m4"/>
       <message xmi:id="m1" name="login(name, password)" sendEvent="m1_send" receiveEvent="m1_receive"/>
-      <message xmi:id="m2" name="verify(name, password)" sendEvent="m2_send" receiveEvent="m2_receive"/>
+      <message xmi:id="m2" name="verify(name, $h(pw)$)" sendEvent="m2_send" receiveEvent="m2_receive"/>
       <message xmi:id="m3" name="token" messageSort="reply" sendEvent="m3_send" receiveEvent="m3_receive"/>
       <message xmi:id="m5" name="storeSession(token)" messageSort="asynchCall" sendEvent="m5_send" receiveEvent="m5_receive"/>
       <message xmi:id="m4" name="welcome" messageSort="reply" sendEvent="m4_send" receiveEvent="m4_receive"/>
@@ -43,7 +43,7 @@
       <waypoint x="320" y="160"/>
       <waypoint x="550" y="160"/>
       <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m2_label" modelElement="m2">
-        <bounds x="373" y="140" width="125" height="15"/>
+        <bounds x="375" y="138" width="120" height="18"/>
       </ownedElement>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m3_di" modelElement="m3" source="Auth_di" target="WebApp_di">

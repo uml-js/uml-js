@@ -4,31 +4,33 @@ A web-based modeler for UML diagrams. Models are stored as **UML 2.5.1 XMI**, wi
 diagram layout as **UML DI** in the same file, so that a `.uml` file holds both the model
 and its diagrams.
 
-Try it at https://uml-js.github.io/uml-js/, e.g. with an example:
-https://uml-js.github.io/uml-js/?src=examples/component/webshop.uml
+Try it at https://uml-js.github.io/uml-js/.
 
 
 ## Supported diagram types
 
-| Diagram type | Category | UML DI | Supported |
-|---|---|---|:---:|
-| Class | Structure | `UMLClassDiagram` | |
-| Object | Structure | `UMLObjectDiagram` | |
-| Package | Structure | `UMLPackageDiagram` | |
-| Component | Structure | `UMLComponentDiagram` | ✓ |
-| Composite structure | Structure | `UMLCompositeStructureDiagram` | |
-| Deployment | Structure | `UMLDeploymentDiagram` | |
-| Profile | Structure | `UMLProfileDiagram` | |
-| Use case | Behavior | `UMLUseCaseDiagram` | |
-| Activity | Behavior | `UMLActivityDiagram` | |
-| State machine | Behavior | `UMLStateMachineDiagram` | ✓ |
-| Sequence | Interaction | `UMLInteractionDiagram` (kind `sequence`) | ✓ |
-| Communication | Interaction | `UMLInteractionDiagram` (kind `communication`) | |
-| Interaction overview | Interaction | `UMLInteractionDiagram` (kind `overview`) | |
-| Timing | Interaction | `UMLInteractionDiagram` (kind `timing`) | |
+| Diagram type | Category | UML DI | Supported | Example |
+|---|---|---|:---:|---|
+| Class | Structure | `UMLClassDiagram` | | |
+| Object | Structure | `UMLObjectDiagram` | | |
+| Package | Structure | `UMLPackageDiagram` | | |
+| Component | Structure | `UMLComponentDiagram` | ✓ | [webshop.uml](https://uml-js.github.io/uml-js/?src=examples/component/webshop.uml) |
+| Composite structure | Structure | `UMLCompositeStructureDiagram` | | |
+| Deployment | Structure | `UMLDeploymentDiagram` | | |
+| Profile | Structure | `UMLProfileDiagram` | | |
+| Use case | Behavior | `UMLUseCaseDiagram` | | |
+| Activity | Behavior | `UMLActivityDiagram` | | |
+| State machine | Behavior | `UMLStateMachineDiagram` | ✓ | [door.uml](https://uml-js.github.io/uml-js/?src=examples/state-machine/door.uml) |
+| Sequence | Interaction | `UMLInteractionDiagram` (kind `sequence`) | ✓ | [login.uml](https://uml-js.github.io/uml-js/?src=examples/sequence/login.uml) |
+| Communication | Interaction | `UMLInteractionDiagram` (kind `communication`) | | |
+| Interaction overview | Interaction | `UMLInteractionDiagram` (kind `overview`) | | |
+| Timing | Interaction | `UMLInteractionDiagram` (kind `timing`) | | |
 
 All diagrams of a file share one model. Model elements and diagrams of unsupported types are
 kept when a file is saved.
+
+Names, guards, triggers and other text may contain inline math in TeX between dollar signs,
+e.g. `[$n \geq 3$]`; `\$` is a dollar sign.
 
 
 ## XMI
@@ -74,8 +76,8 @@ http://localhost:5173/?src=/examples/sequence/login.uml.
 
 ## Acknowledgements
 
-UML.js is built on [diagram-js](https://github.com/bpmn-io/diagram-js) and follows the
-design of [bpmn-js](https://github.com/bpmn-io/bpmn-js).
+UML.js is built on [diagram-js](https://github.com/bpmn-io/diagram-js). Math is rendered with
+[MathJax](https://www.mathjax.org).
 
 
 ## License
