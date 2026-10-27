@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="Model_1" name="Model">
+    <packagedElement xmi:type="uml:Package" xmi:id="app" name="app">
+      <packageImport xmi:id="imports" importedPackage="util"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="util" name="util"/>
+  </uml:Model>
+  <umldi:UMLPackageDiagram xmi:id="PackageDiagram_1" name="Preview" modelElement="Model_1">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="app_di" modelElement="app">
+      <bounds x="40" y="40" width="140" height="90"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="util_di" modelElement="util">
+      <bounds x="280" y="40" width="140" height="90"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="imports_di" source="app_di" target="util_di" modelElement="imports">
+      <waypoint x="180" y="95"/>
+      <waypoint x="280" y="95"/>
+    </ownedElement>
+  </umldi:UMLPackageDiagram>
+</xmi:XMI>

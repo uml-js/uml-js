@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="Model_1" name="Model">
+    <packagedElement xmi:type="uml:Device" xmi:id="client" name="Client PC">
+      <nestedNode xmi:type="uml:ExecutionEnvironment" xmi:id="browser" name="Browser"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Device" xmi:id="web" name="Web server">
+      <nestedNode xmi:type="uml:ExecutionEnvironment" xmi:id="tomcat" name="Tomcat">
+        <deployment xmi:id="deploy_war" client="tomcat" supplier="war" deployedArtifact="war"/>
+      </nestedNode>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Artifact" xmi:id="war" name="shop.war"/>
+    <packagedElement xmi:type="uml:Device" xmi:id="db" name="Database server">
+      <nestedNode xmi:type="uml:ExecutionEnvironment" xmi:id="postgres" name="PostgreSQL">
+        <deployment xmi:id="deploy_schema" client="postgres" supplier="schema" deployedArtifact="schema"/>
+      </nestedNode>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Artifact" xmi:id="schema" name="schema.sql"/>
+    <packagedElement xmi:type="uml:CommunicationPath" xmi:id="https" memberEnd="https_source https_target">
+      <ownedEnd xmi:id="https_source" type="client" association="https"/>
+      <ownedEnd xmi:id="https_target" type="web" association="https"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:CommunicationPath" xmi:id="jdbc" memberEnd="jdbc_source jdbc_target">
+      <ownedEnd xmi:id="jdbc_source" type="web" association="jdbc"/>
+      <ownedEnd xmi:id="jdbc_target" type="db" association="jdbc"/>
+    </packagedElement>
+  </uml:Model>
+  <umldi:UMLDeploymentDiagram xmi:id="DeploymentDiagram_1" name="Web shop" modelElement="Model_1">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="client_di" modelElement="client">
+      <bounds x="40" y="60" width="200" height="150"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="browser_di" modelElement="browser">
+        <bounds x="60" y="120" width="150" height="70"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="web_di" modelElement="web">
+      <bounds x="340" y="40" width="260" height="200"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="tomcat_di" modelElement="tomcat">
+        <bounds x="360" y="100" width="210" height="120"/>
+        <ownedElement xmi:type="umldi:UMLShape" xmi:id="war_di" modelElement="war">
+          <bounds x="390" y="150" width="140" height="50"/>
+        </ownedElement>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="db_di" modelElement="db">
+      <bounds x="700" y="40" width="260" height="200"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="postgres_di" modelElement="postgres">
+        <bounds x="720" y="100" width="210" height="120"/>
+        <ownedElement xmi:type="umldi:UMLShape" xmi:id="schema_di" modelElement="schema">
+          <bounds x="750" y="150" width="140" height="50"/>
+        </ownedElement>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="https_di" source="client_di" target="web_di" modelElement="https">
+      <waypoint x="228" y="140"/>
+      <waypoint x="340" y="140"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="jdbc_di" source="web_di" target="db_di" modelElement="jdbc">
+      <waypoint x="588" y="140"/>
+      <waypoint x="700" y="140"/>
+    </ownedElement>
+  </umldi:UMLDeploymentDiagram>
+</xmi:XMI>

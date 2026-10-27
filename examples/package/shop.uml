@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="Model_1" name="Model">
+    <packagedElement xmi:type="uml:Package" xmi:id="shop" name="shop">
+      <packagedElement xmi:type="uml:Package" xmi:id="ui" name="ui">
+        <packageImport xmi:id="uiImportsOrders" importedPackage="orders"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="orders" name="orders">
+        <packageImport xmi:id="ordersAccessesPersistence" importedPackage="persistence" visibility="private"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="ordersUsesUtil" client="orders" supplier="util"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="util" name="util"/>
+    <packagedElement xmi:type="uml:Package" xmi:id="persistence" name="persistence"/>
+  </uml:Model>
+  <umldi:UMLPackageDiagram xmi:id="PackageDiagram_1" name="Web shop" modelElement="Model_1">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="shop_di" modelElement="shop">
+      <bounds x="40" y="40" width="420" height="230"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="ui_di" modelElement="ui">
+        <bounds x="70" y="120" width="130" height="100"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="orders_di" modelElement="orders">
+        <bounds x="280" y="120" width="160" height="100"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="util_di" modelElement="util">
+      <bounds x="560" y="40" width="160" height="100"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="persistence_di" modelElement="persistence">
+      <bounds x="560" y="220" width="160" height="100"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="uiImportsOrders_di" source="ui_di" target="orders_di" modelElement="uiImportsOrders">
+      <waypoint x="200" y="180"/>
+      <waypoint x="280" y="180"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="ordersUsesUtil_di" source="orders_di" target="util_di" modelElement="ordersUsesUtil">
+      <waypoint x="440" y="150"/>
+      <waypoint x="500" y="150"/>
+      <waypoint x="500" y="100"/>
+      <waypoint x="560" y="100"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="ordersAccessesPersistence_di" source="orders_di" target="persistence_di" modelElement="ordersAccessesPersistence">
+      <waypoint x="440" y="200"/>
+      <waypoint x="500" y="200"/>
+      <waypoint x="500" y="280"/>
+      <waypoint x="560" y="280"/>
+    </ownedElement>
+  </umldi:UMLPackageDiagram>
+</xmi:XMI>

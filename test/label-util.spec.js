@@ -38,7 +38,19 @@ describe('state-machine - LabelUtil', function() {
       name: 'Open',
       entry: 'lightOn',
       doActivity: 'hum',
-      exit: 'off'
+      exit: 'off',
+      other: ''
+    });
+  });
+
+
+  it('should keep other text of states', function() {
+    expect(parseStateText('Open\nentry / lightOn\nnot a behaviour\n\nnor this')).toEqual({
+      name: 'Open',
+      entry: 'lightOn',
+      doActivity: '',
+      exit: '',
+      other: 'not a behaviour\nnor this'
     });
   });
 
@@ -87,6 +99,18 @@ describe('state-machine - LabelUtil', function() {
     expect(getStateText(state)).toBe(text);
     expect(state.entry.$type).toBe('uml:OpaqueBehavior');
     expect(state.doActivity).toBeUndefined();
+
+    // other text is kept as comment, replaced or removed with the text
+    const kept = 'Open\nentry / lightOn\nsomething else';
+
+    Object.entries(getLabelProperties(state, kept, factory)).forEach(([ key, value ]) => state.set(key, value));
+
+    expect(getStateText(state)).toBe(kept);
+    expect(state.ownedComment.map(comment => comment.body)).toEqual([ 'something else' ]);
+
+    Object.entries(getLabelProperties(state, text, factory)).forEach(([ key, value ]) => state.set(key, value));
+
+    expect(state.ownedComment).toEqual([]);
   });
 
 });

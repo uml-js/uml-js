@@ -36,21 +36,21 @@
       <waypoint x="100" y="120"/>
       <waypoint x="320" y="120"/>
       <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m1_label" modelElement="m1">
-        <bounds x="150" y="100" width="120" height="15"/>
+        <bounds x="149" y="100" width="122" height="15"/>
       </ownedElement>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m2_di" modelElement="m2" source="WebApp_di" target="Auth_di">
       <waypoint x="320" y="160"/>
       <waypoint x="550" y="160"/>
       <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m2_label" modelElement="m2">
-        <bounds x="375" y="138" width="120" height="18"/>
+        <bounds x="380" y="138" width="109" height="15"/>
       </ownedElement>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m3_di" modelElement="m3" source="Auth_di" target="WebApp_di">
       <waypoint x="550" y="200"/>
       <waypoint x="320" y="200"/>
       <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m3_label" modelElement="m3">
-        <bounds x="420" y="180" width="35" height="15"/>
+        <bounds x="422" y="180" width="30" height="15"/>
       </ownedElement>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m5_di" modelElement="m5" source="WebApp_di" target="WebApp_di">
@@ -59,14 +59,14 @@
       <waypoint x="360" y="260"/>
       <waypoint x="320" y="260"/>
       <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m5_label" modelElement="m5">
-        <bounds x="366" y="243" width="110" height="15"/>
+        <bounds x="368" y="243" width="107" height="15"/>
       </ownedElement>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="m4_di" modelElement="m4" source="WebApp_di" target="User_di">
       <waypoint x="320" y="300"/>
       <waypoint x="100" y="300"/>
       <ownedElement xmi:type="umldi:UMLLabel" xmi:id="m4_label" modelElement="m4">
-        <bounds x="185" y="280" width="50" height="15"/>
+        <bounds x="186" y="280" width="48" height="15"/>
       </ownedElement>
     </ownedElement>
   </umldi:UMLInteractionDiagram>

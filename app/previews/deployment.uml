@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="Model_1" name="Model">
+    <packagedElement xmi:type="uml:Device" xmi:id="server" name="Server">
+      <deployment xmi:id="deploy_app" client="server" supplier="app" deployedArtifact="app"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Artifact" xmi:id="app" name="app.jar"/>
+    <packagedElement xmi:type="uml:Node" xmi:id="db" name="Database"/>
+    <packagedElement xmi:type="uml:CommunicationPath" xmi:id="path" memberEnd="path_source path_target">
+      <ownedEnd xmi:id="path_source" type="server" association="path"/>
+      <ownedEnd xmi:id="path_target" type="db" association="path"/>
+    </packagedElement>
+  </uml:Model>
+  <umldi:UMLDeploymentDiagram xmi:id="DeploymentDiagram_1" name="Preview" modelElement="Model_1">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="server_di" modelElement="server">
+      <bounds x="40" y="30" width="200" height="130"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="app_di" modelElement="app">
+        <bounds x="65" y="90" width="130" height="50"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="db_di" modelElement="db">
+      <bounds x="320" y="50" width="150" height="90"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="path_di" source="server_di" target="db_di" modelElement="path">
+      <waypoint x="228" y="100"/>
+      <waypoint x="320" y="100"/>
+    </ownedElement>
+  </umldi:UMLDeploymentDiagram>
+</xmi:XMI>

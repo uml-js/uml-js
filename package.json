@@ -4,12 +4,33 @@
   "description": "A bpmn-js like UML editor that reads and writes UML 2.5.1 XMI with UML DI",
   "type": "module",
   "main": "lib/uml.js",
+  "exports": {
+    ".": "./lib/uml.js"
+  },
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "test": "vitest run"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uml-js/uml-js.git"
+  },
+  "homepage": "https://uml-js.github.io/uml-js/",
+  "bugs": {
+    "url": "https://github.com/uml-js/uml-js/issues"
+  },
+  "keywords": [
+    "uml",
+    "xmi",
+    "diagram",
+    "modeler",
+    "diagram-js"
+  ],
   "dependencies": {
     "diagram-js": "^15.28.1",
     "diagram-js-direct-editing": "^3.6.0",

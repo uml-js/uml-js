@@ -35,7 +35,7 @@ describe('moddle - XMI', function() {
 
     const lockedShape = diagram.ownedElement.find(e => e.id === 'Locked_di');
 
-    expect(lockedShape.bounds).toMatchObject({ x: 160, y: 330, width: 380, height: 160 });
+    expect(lockedShape.bounds).toMatchObject({ x: 160, y: 330, width: 450, height: 160 });
     expect(lockedShape.ownedElement).toHaveLength(3);
 
     const openEdge = diagram.ownedElement.find(e => e.id === 't_open_di');
@@ -273,6 +273,65 @@ describe('moddle - XMI class diagrams', function() {
     expect(owns.memberEnd[1].upperValue.value).toBe('*');
 
     expect(model.packagedElement.find(e => e.id === 'AccountType').ownedLiteral.map(l => l.name)).toEqual([ 'SAVINGS', 'CHECKING' ]);
+
+    const { xml } = await moddle.toXML(document);
+    const { document: reimported } = await moddle.fromXML(xml);
+
+    expect((await moddle.toXML(reimported)).xml).toBe(xml);
+  });
+
+});
+
+
+describe('moddle - XMI package diagrams', function() {
+
+  const shopXML = readFileSync(new URL('../examples/package/shop.uml', import.meta.url), 'utf8');
+
+  it('should read and round-trip', async function() {
+    const moddle = new UmlModdle();
+
+    const { document, warnings } = await moddle.fromXML(shopXML);
+
+    expect(warnings).toEqual([]);
+
+    const [ model ] = document.getElements('uml:Model');
+
+    const shop = model.packagedElement.find(e => e.id === 'shop');
+    const [ ui, orders ] = shop.packagedElement.filter(e => e.$type === 'uml:Package');
+
+    expect(ui.packageImport[0].importedPackage).toBe(orders);
+    expect(orders.packageImport[0].visibility).toBe('private');
+    expect(shop.packagedElement.find(e => e.id === 'ordersUsesUtil').supplier[0].id).toBe('util');
+
+    const { xml } = await moddle.toXML(document);
+    const { document: reimported } = await moddle.fromXML(xml);
+
+    expect((await moddle.toXML(reimported)).xml).toBe(xml);
+  });
+
+});
+
+
+describe('moddle - XMI deployment diagrams', function() {
+
+  const shopXML = readFileSync(new URL('../examples/deployment/shop.uml', import.meta.url), 'utf8');
+
+  it('should read and round-trip', async function() {
+    const moddle = new UmlModdle();
+
+    const { document, warnings } = await moddle.fromXML(shopXML);
+
+    expect(warnings).toEqual([]);
+
+    const [ model ] = document.getElements('uml:Model');
+
+    const web = model.packagedElement.find(e => e.id === 'web');
+    const tomcat = web.nestedNode[0];
+
+    expect(web.$type).toBe('uml:Device');
+    expect(tomcat.$type).toBe('uml:ExecutionEnvironment');
+    expect(tomcat.deployment[0].deployedArtifact[0].name).toBe('shop.war');
+    expect(model.packagedElement.find(e => e.id === 'https').memberEnd.map(end => end.type.id)).toEqual([ 'client', 'web' ]);
 
     const { xml } = await moddle.toXML(document);
     const { document: reimported } = await moddle.fromXML(xml);

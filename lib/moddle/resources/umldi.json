@@ -198,6 +198,18 @@
       ]
     },
     {
+      "name": "UMLPackageDiagram",
+      "superClass": [
+        "UMLStructureDiagram"
+      ]
+    },
+    {
+      "name": "UMLDeploymentDiagram",
+      "superClass": [
+        "UMLStructureDiagram"
+      ]
+    },
+    {
       "name": "UMLInteractionDiagram",
       "superClass": [
         "UMLBehaviorDiagram"
