@@ -13,6 +13,10 @@ Supported diagram types:
 | Component | `umldi:UMLComponentDiagram` | viewer + modeller |
 
 
+Try it at https://uml-js.github.io/uml-js/ (deployed by `.github/workflows/deploy.yml` on
+every push to `main`), e.g. https://uml-js.github.io/uml-js/?src=examples/webshop.uml.
+
+
 ## Usage
 
 ```js
