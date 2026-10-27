@@ -30,7 +30,7 @@ All diagrams of a file share one model. Model elements and diagrams of unsupport
 kept when a file is saved.
 
 Names, guards, triggers and other text may contain inline math in TeX between dollar signs,
-e.g. `[$n \geq 3$]`; `\$` is a dollar sign.
+e.g. `[$n \geq 3$]`. Prices like `500$` or `$5 to $10` stay text; `\$` is a dollar sign.
 
 
 ## XMI
