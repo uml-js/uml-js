@@ -1,7 +1,7 @@
 {
   "name": "@uml-js/uml-js",
   "version": "0.1.0",
-  "description": "A bpmn-js like UML editor that reads and writes UML 2.5.1 XMI with UML DI",
+  "description": "A web-based UML modeler with MathJax support",
   "type": "module",
   "main": "lib/uml.js",
   "exports": {
