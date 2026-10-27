@@ -206,3 +206,41 @@ describe('moddle - XMI activity diagrams', function() {
   });
 
 });
+
+
+describe('moddle - XMI use case diagrams', function() {
+
+  const shopXML = readFileSync(new URL('../examples/use-case/shop.uml', import.meta.url), 'utf8');
+
+  it('should read and round-trip', async function() {
+    const moddle = new UmlModdle();
+
+    const { document, warnings } = await moddle.fromXML(shopXML);
+
+    expect(warnings).toEqual([]);
+
+    const [ model ] = document.getElements('uml:Model');
+
+    const shop = model.packagedElement.find(e => e.id === 'Shop');
+    const order = shop.ownedUseCase.find(u => u.id === 'Order');
+
+    expect(order.$type).toBe('uml:UseCase');
+    expect(order.subject).toEqual([ shop ]);
+    expect(order.include.map(i => i.addition.id)).toEqual([ 'LogIn', 'Pay' ]);
+    expect(shop.ownedUseCase.find(u => u.id === 'Voucher').extend[0].extendedCase).toBe(order);
+
+    const member = model.packagedElement.find(e => e.id === 'Member');
+
+    expect(member.generalization[0].general.id).toBe('Customer');
+
+    const association = model.packagedElement.find(e => e.id === 'a2');
+
+    expect(association.memberEnd.map(end => end.type.id)).toEqual([ 'Customer', 'Order' ]);
+
+    const { xml } = await moddle.toXML(document);
+    const { document: reimported } = await moddle.fromXML(xml);
+
+    expect((await moddle.toXML(reimported)).xml).toBe(xml);
+  });
+
+});

@@ -12,13 +12,15 @@ import stateMachinePreviewXML from './previews/state-machine.uml?raw';
 import componentPreviewXML from './previews/component.uml?raw';
 import sequencePreviewXML from './previews/sequence.uml?raw';
 import activityPreviewXML from './previews/activity.uml?raw';
+import useCasePreviewXML from './previews/use-case.uml?raw';
 
 // small models shown on the start screen, by diagram type
 const PREVIEWS = {
   'state-machine': stateMachinePreviewXML,
   'component': componentPreviewXML,
   'sequence': sequencePreviewXML,
-  'activity': activityPreviewXML
+  'activity': activityPreviewXML,
+  'use-case': useCasePreviewXML
 };
 
 // examples, published along with the app (see .github/workflows/deploy.yml)
@@ -26,7 +28,8 @@ const EXAMPLES = {
   'state-machine': 'examples/state-machine/door.uml',
   'component': 'examples/component/webshop.uml',
   'sequence': 'examples/sequence/login.uml',
-  'activity': 'examples/activity/order.uml'
+  'activity': 'examples/activity/order.uml',
+  'use-case': 'examples/use-case/shop.uml'
 };
 
 const DISCARD_ICON = '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
@@ -210,16 +213,16 @@ const toolbar = createToolbar({
 setModelButtonsEnabled(false);
 
 // shown where bpmn-js shows its bpmn.io logo, linking to the project
-const watermark = document.createElement('a');
+const repoLink = document.createElement('a');
 
-watermark.className = 'watermark';
-watermark.textContent = 'UML.js';
-watermark.href = 'https://github.com/uml-js/uml-js';
-watermark.target = '_blank';
-watermark.rel = 'noopener';
-watermark.title = 'UML.js on GitHub';
+repoLink.className = 'repo-link';
+repoLink.textContent = 'UML.js';
+repoLink.href = 'https://github.com/uml-js/uml-js';
+repoLink.target = '_blank';
+repoLink.rel = 'noopener';
+repoLink.title = 'UML.js on GitHub';
 
-toolbar.element.appendChild(watermark);
+toolbar.element.appendChild(repoLink);
 
 function setModelButtonsEnabled(enabled) {
   for (const button of toolbar.element.querySelectorAll('button')) {

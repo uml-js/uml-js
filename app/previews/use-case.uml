@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="model" name="Preview">
+    <packagedElement xmi:type="uml:Actor" xmi:id="Customer" name="Customer"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="Shop" name="Shop">
+      <ownedUseCase xmi:id="Order" name="Place order" subject="Shop">
+        <include xmi:id="i1" addition="Pay"/>
+      </ownedUseCase>
+      <ownedUseCase xmi:id="Pay" name="Pay" subject="Shop"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="a1" memberEnd="a1_source a1_target">
+      <ownedEnd xmi:id="a1_source" type="Customer" association="a1"/>
+      <ownedEnd xmi:id="a1_target" type="Order" association="a1"/>
+    </packagedElement>
+  </uml:Model>
+  <umldi:UMLUseCaseDiagram xmi:id="diagram" name="Shop" modelElement="model">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="Customer_di" modelElement="Customer">
+      <bounds x="40" y="80" width="40" height="70"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="Customer_label" modelElement="Customer">
+        <bounds x="34" y="154" width="53" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="Shop_di" modelElement="Shop">
+      <bounds x="150" y="20" width="220" height="200"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="Order_di" modelElement="Order">
+        <bounds x="175" y="60" width="130" height="46"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="Pay_di" modelElement="Pay">
+        <bounds x="175" y="150" width="130" height="46"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="a1_di" modelElement="a1" source="Customer_di" target="Order_di">
+      <waypoint x="80" y="111"/>
+      <waypoint x="182" y="93"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="i1_di" modelElement="i1" source="Order_di" target="Pay_di">
+      <waypoint x="240" y="106"/>
+      <waypoint x="240" y="150"/>
+    </ownedElement>
+  </umldi:UMLUseCaseDiagram>
+</xmi:XMI>

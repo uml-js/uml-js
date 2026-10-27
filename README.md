@@ -18,7 +18,7 @@ Try it at https://uml-js.github.io/uml-js/.
 | Composite structure | Structure | `UMLCompositeStructureDiagram` | | |
 | Deployment | Structure | `UMLDeploymentDiagram` | | |
 | Profile | Structure | `UMLProfileDiagram` | | |
-| Use case | Behavior | `UMLUseCaseDiagram` | | |
+| Use case | Behavior | `UMLUseCaseDiagram` | ✓ | [shop.uml](https://uml-js.github.io/uml-js/?src=examples/use-case/shop.uml) |
 | Activity | Behavior | `UMLActivityDiagram` | ✓ | [order.uml](https://uml-js.github.io/uml-js/?src=examples/activity/order.uml) |
 | State machine | Behavior | `UMLStateMachineDiagram` | ✓ | [door.uml](https://uml-js.github.io/uml-js/?src=examples/state-machine/door.uml) |
 | Sequence | Interaction | `UMLInteractionDiagram` (kind `sequence`) | ✓ | [login.uml](https://uml-js.github.io/uml-js/?src=examples/sequence/login.uml) |

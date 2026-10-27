@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="model" name="Shop">
+    <packagedElement xmi:type="uml:Actor" xmi:id="Customer" name="Customer"/>
+    <packagedElement xmi:type="uml:Actor" xmi:id="Member" name="Member">
+      <generalization xmi:id="g1" general="Customer"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Actor" xmi:id="Clerk" name="Clerk"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="Shop" name="Online shop">
+      <ownedUseCase xmi:id="Browse" name="Browse catalog" subject="Shop"/>
+      <ownedUseCase xmi:id="Order" name="Place order" subject="Shop">
+        <include xmi:id="i1" addition="LogIn"/>
+        <include xmi:id="i2" addition="Pay"/>
+      </ownedUseCase>
+      <ownedUseCase xmi:id="LogIn" name="Log in" subject="Shop"/>
+      <ownedUseCase xmi:id="Pay" name="Pay" subject="Shop"/>
+      <ownedUseCase xmi:id="Voucher" name="Apply voucher" subject="Shop">
+        <extend xmi:id="x1" extendedCase="Order"/>
+      </ownedUseCase>
+      <ownedUseCase xmi:id="Ship" name="Ship order" subject="Shop"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="a1" memberEnd="a1_source a1_target">
+      <ownedEnd xmi:id="a1_source" type="Customer" association="a1"/>
+      <ownedEnd xmi:id="a1_target" type="Browse" association="a1"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="a2" memberEnd="a2_source a2_target">
+      <ownedEnd xmi:id="a2_source" type="Customer" association="a2"/>
+      <ownedEnd xmi:id="a2_target" type="Order" association="a2"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="a3" memberEnd="a3_source a3_target">
+      <ownedEnd xmi:id="a3_source" type="Clerk" association="a3"/>
+      <ownedEnd xmi:id="a3_target" type="Ship" association="a3"/>
+    </packagedElement>
+  </uml:Model>
+  <umldi:UMLUseCaseDiagram xmi:id="diagram" name="Online shop" modelElement="model">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="Customer_di" modelElement="Customer">
+      <bounds x="170" y="190" width="40" height="70"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="Customer_label" modelElement="Customer">
+        <bounds x="164" y="264" width="53" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="Member_di" modelElement="Member">
+      <bounds x="40" y="190" width="40" height="70"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="Member_label" modelElement="Member">
+        <bounds x="38" y="264" width="45" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="Clerk_di" modelElement="Clerk">
+      <bounds x="760" y="370" width="40" height="70"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="Clerk_label" modelElement="Clerk">
+        <bounds x="765" y="444" width="30" height="15"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="Shop_di" modelElement="Shop">
+      <bounds x="300" y="40" width="380" height="440"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="Browse_di" modelElement="Browse">
+        <bounds x="330" y="90" width="140" height="60"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="Order_di" modelElement="Order">
+        <bounds x="330" y="220" width="140" height="60"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="LogIn_di" modelElement="LogIn">
+        <bounds x="510" y="160" width="140" height="60"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="Pay_di" modelElement="Pay">
+        <bounds x="510" y="280" width="140" height="60"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="Voucher_di" modelElement="Voucher">
+        <bounds x="330" y="360" width="140" height="60"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="Ship_di" modelElement="Ship">
+        <bounds x="510" y="390" width="140" height="60"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="a1_di" modelElement="a1" source="Customer_di" target="Browse_di">
+      <waypoint x="210" y="215"/>
+      <waypoint x="354" y="143"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="a2_di" modelElement="a2" source="Customer_di" target="Order_di">
+      <waypoint x="210" y="227"/>
+      <waypoint x="333" y="242"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="a3_di" modelElement="a3" source="Clerk_di" target="Ship_di">
+      <waypoint x="760" y="406"/>
+      <waypoint x="649" y="415"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="i1_di" modelElement="i1" source="Order_di" target="LogIn_di">
+      <waypoint x="455" y="232"/>
+      <waypoint x="525" y="208"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="i2_di" modelElement="i2" source="Order_di" target="Pay_di">
+      <waypoint x="455" y="268"/>
+      <waypoint x="525" y="292"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="x1_di" modelElement="x1" source="Voucher_di" target="Order_di">
+      <waypoint x="400" y="360"/>
+      <waypoint x="400" y="280"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="g1_di" modelElement="g1" source="Member_di" target="Customer_di">
+      <waypoint x="80" y="225"/>
+      <waypoint x="170" y="225"/>
+    </ownedElement>
+  </umldi:UMLUseCaseDiagram>
+</xmi:XMI>

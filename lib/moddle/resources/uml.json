@@ -123,6 +123,22 @@
         {
           "name": "isAbstract",
           "type": "Boolean"
+        },
+        {
+          "name": "generalization",
+          "type": "Generalization",
+          "isMany": true
+        },
+        {
+          "name": "ownedUseCase",
+          "type": "UseCase",
+          "isMany": true
+        },
+        {
+          "name": "useCase",
+          "type": "UseCase",
+          "isMany": true,
+          "isReference": true
         }
       ]
     },
@@ -235,6 +251,11 @@
         {
           "name": "isStatic",
           "type": "Boolean"
+        },
+        {
+          "name": "association",
+          "type": "Association",
+          "isReference": true
         }
       ]
     },
@@ -291,6 +312,94 @@
           "name": "partWithPort",
           "type": "Property",
           "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "Actor",
+      "superClass": [
+        "Classifier"
+      ]
+    },
+    {
+      "name": "UseCase",
+      "superClass": [
+        "Classifier"
+      ],
+      "properties": [
+        {
+          "name": "include",
+          "type": "Include",
+          "isMany": true
+        },
+        {
+          "name": "extend",
+          "type": "Extend",
+          "isMany": true
+        },
+        {
+          "name": "subject",
+          "type": "Classifier",
+          "isMany": true,
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "Include",
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "addition",
+          "type": "UseCase",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "Extend",
+      "superClass": [
+        "NamedElement"
+      ],
+      "properties": [
+        {
+          "name": "extendedCase",
+          "type": "UseCase",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "Generalization",
+      "superClass": [
+        "uml:Element"
+      ],
+      "properties": [
+        {
+          "name": "general",
+          "type": "Classifier",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "Association",
+      "superClass": [
+        "Classifier"
+      ],
+      "properties": [
+        {
+          "name": "memberEnd",
+          "type": "Property",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "ownedEnd",
+          "type": "Property",
+          "isMany": true
         }
       ]
     },

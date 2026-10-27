@@ -50,9 +50,9 @@ body {
   min-height: 0;
 }
 
-/* the watermark takes the place the toolbar leaves for the bpmn.io logo of bpmn-js */
+/* the link to the repository takes the place the toolbar leaves for the bpmn.io logo of bpmn-js */
 
-.bpmn-toolbar .watermark {
+.bpmn-toolbar .repo-link {
   position: absolute;
   top: 0;
   right: 8px;
@@ -71,7 +71,7 @@ body {
   user-select: none;
 }
 
-.bpmn-toolbar .watermark:hover {
+.bpmn-toolbar .repo-link:hover {
   color: var(--bpmn-toolbar-accent, hsl(205, 100%, 45%));
 }
 
