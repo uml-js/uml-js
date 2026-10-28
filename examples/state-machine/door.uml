@@ -6,6 +6,7 @@
         <subvertex xmi:type="uml:Pseudostate" xmi:id="initial" kind="initial"/>
         <subvertex xmi:type="uml:State" xmi:id="Closed" name="Closed"/>
         <subvertex xmi:type="uml:State" xmi:id="Open" name="Open" submachine="OpenDoor">
+          <connection xmi:id="Open_slammed" exit="slammed"/>
           <entry xmi:type="uml:OpaqueBehavior" xmi:id="Open_entry">
             <body>lightOn</body>
           </entry>
@@ -48,6 +49,7 @@
         <transition xmi:id="t_unlock" source="Locked" target="Closed">
           <trigger xmi:id="t_unlock_trigger" name="unlock"/>
         </transition>
+        <transition xmi:id="t_slammed" source="Open_slammed" target="Closed"/>
         <transition xmi:id="t_remove" source="Closed" target="final">
           <trigger xmi:id="t_remove_trigger" name="remove"/>
         </transition>
@@ -62,7 +64,11 @@
         <transition xmi:id="t_push" source="Ajar" target="WideOpen">
           <trigger xmi:id="t_push_trigger" name="push"/>
         </transition>
+        <transition xmi:id="t_slam" source="WideOpen" target="slammed">
+          <trigger xmi:id="t_slam_trigger" name="gust"/>
+        </transition>
       </region>
+      <connectionPoint xmi:id="slammed" name="slammed" kind="exitPoint"/>
     </packagedElement>
   </uml:Model>
   <umldi:UMLStateMachineDiagram xmi:id="DoorSM_diagram" name="DoorSM" modelElement="DoorSM">
@@ -74,6 +80,12 @@
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLStateShape" xmi:id="Open_di" modelElement="Open">
       <bounds x="480" y="120" width="140" height="80"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="Open_slammed_di" modelElement="Open_slammed">
+        <bounds x="590" y="190" width="20" height="20"/>
+        <ownedElement xmi:type="umldi:UMLLabel" xmi:id="Open_slammed_label" modelElement="Open_slammed">
+          <bounds x="614" y="206" width="56" height="20"/>
+        </ownedElement>
+      </ownedElement>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLStateShape" xmi:id="Locked_di" modelElement="Locked">
       <bounds x="160" y="330" width="450" height="160"/>
@@ -122,6 +134,12 @@
         <bounds x="292" y="250" width="50" height="20"/>
       </ownedElement>
     </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="t_slammed_di" modelElement="t_slammed" source="Open_slammed_di" target="Closed_di">
+      <waypoint x="600" y="210"/>
+      <waypoint x="600" y="240"/>
+      <waypoint x="305" y="240"/>
+      <waypoint x="305" y="190"/>
+    </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="t_remove_di" modelElement="t_remove" source="Closed_di" target="final_di">
       <waypoint x="300" y="130"/>
       <waypoint x="300" y="80"/>
@@ -160,6 +178,19 @@
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="t_push_di" modelElement="t_push" source="Ajar_di" target="WideOpen_di">
       <waypoint x="260" y="90"/>
       <waypoint x="400" y="90"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="slammed_di" modelElement="slammed">
+      <bounds x="580" y="80" width="20" height="20"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="slammed_label" modelElement="slammed">
+        <bounds x="562" y="104" width="56" height="20"/>
+      </ownedElement>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="t_slam_di" modelElement="t_slam" source="WideOpen_di" target="slammed_di">
+      <waypoint x="500" y="90"/>
+      <waypoint x="580" y="90"/>
+      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="t_slam_label" modelElement="t_slam">
+        <bounds x="520" y="68" width="40" height="20"/>
+      </ownedElement>
     </ownedElement>
   </umldi:UMLStateMachineDiagram>
 </xmi:XMI>

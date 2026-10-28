@@ -1185,6 +1185,11 @@
           "isMany": true
         },
         {
+          "name": "connection",
+          "type": "ConnectionPointReference",
+          "isMany": true
+        },
+        {
           "name": "connectionPoint",
           "type": "Pseudostate",
           "isMany": true
@@ -1229,6 +1234,26 @@
           "name": "kind",
           "type": "PseudostateKind",
           "default": "initial"
+        }
+      ]
+    },
+    {
+      "name": "ConnectionPointReference",
+      "superClass": [
+        "Vertex"
+      ],
+      "properties": [
+        {
+          "name": "entry",
+          "type": "Pseudostate",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "exit",
+          "type": "Pseudostate",
+          "isMany": true,
+          "isReference": true
         }
       ]
     },

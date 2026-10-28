@@ -70,6 +70,62 @@ describe('moddle - XMI', function() {
   });
 
 
+  it('should read and round-trip entry and exit points', async function() {
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
+  <uml:Model xmi:id="model">
+    <packagedElement xmi:type="uml:StateMachine" xmi:id="Door">
+      <region xmi:id="Door_region">
+        <subvertex xmi:type="uml:State" xmi:id="Open" name="Open" submachine="Opening">
+          <connection xmi:id="Open_slammed" exit="slammed"/>
+        </subvertex>
+        <subvertex xmi:type="uml:State" xmi:id="Closed" name="Closed"/>
+        <transition xmi:id="t_slammed" source="Open_slammed" target="Closed"/>
+      </region>
+    </packagedElement>
+    <packagedElement xmi:type="uml:StateMachine" xmi:id="Opening">
+      <region xmi:id="Opening_region">
+        <subvertex xmi:type="uml:State" xmi:id="Ajar" name="Ajar"/>
+        <transition xmi:id="t_slam" source="Ajar" target="slammed"/>
+      </region>
+      <connectionPoint xmi:id="slammed" name="slammed" kind="exitPoint"/>
+    </packagedElement>
+  </uml:Model>
+  <umldi:UMLStateMachineDiagram xmi:id="Door_diagram" modelElement="Door">
+    <ownedElement xmi:type="umldi:UMLStateShape" xmi:id="Open_di" modelElement="Open">
+      <bounds x="100" y="100" width="120" height="60"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="Open_slammed_di" modelElement="Open_slammed">
+        <bounds x="210" y="120" width="20" height="20"/>
+      </ownedElement>
+    </ownedElement>
+  </umldi:UMLStateMachineDiagram>
+</xmi:XMI>`;
+
+    const moddle = new UmlModdle();
+
+    const { document, warnings } = await moddle.fromXML(xml);
+
+    expect(warnings).toEqual([]);
+
+    const [ door, opening ] = document.getElements('uml:Model')[0].packagedElement;
+
+    const open = door.region[0].subvertex[0];
+    const [ slammed ] = opening.connectionPoint;
+    const [ reference ] = open.connection;
+
+    expect(slammed.kind).toBe('exitPoint');
+    expect(reference.$type).toBe('uml:ConnectionPointReference');
+    expect(reference.exit).toEqual([ slammed ]);
+    expect(door.region[0].transition[0].source).toBe(reference);
+    expect(opening.region[0].transition[0].target).toBe(slammed);
+
+    const { xml: written } = await moddle.toXML(document);
+
+    expect(written).toContain('<connection xmi:id="Open_slammed" exit="slammed"/>');
+    expect(written).toContain('<connectionPoint xmi:id="slammed" name="slammed" kind="exitPoint"/>');
+  });
+
+
   it('should preserve unknown content', async function() {
     const moddle = new UmlModdle();
 
