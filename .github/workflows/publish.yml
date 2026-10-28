@@ -24,11 +24,12 @@ jobs:
           cache: npm
           registry-url: https://registry.npmjs.org
 
-      # trusted publishing needs npm 11.5.1 or later
-      - run: npm install -g npm@latest
-
+      # with the npm of Node, as later ones refuse git dependencies (bpmn-js-toolbar) by default
       - run: npm ci
 
       - run: npm test
+
+      # trusted publishing needs npm 11.5.1 or later
+      - run: npm install -g npm@latest
 
       - run: npm publish --access public
