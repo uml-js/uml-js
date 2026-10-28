@@ -6,6 +6,10 @@ html, body {
   height: 100%;
   font-family: Arial, sans-serif;
   font-size: 14px;
+
+  /* the page never scrolls or bounces (on touch devices), only the canvas and start screen move */
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body {
@@ -134,6 +138,7 @@ body {
   /* scroll the tiles within the start screen rather than the page, from the top if they don't fit */
   justify-content: safe center;
   overflow-y: auto;
+  overscroll-behavior: contain;
 
   /* clear of the toolbar at the bottom */
   padding: 24px 16px 60px;
