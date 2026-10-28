@@ -343,6 +343,29 @@ function ignoreAbort(error) {
 }
 
 
+// small screens //////////
+
+// windows too small for palette, toolbar and diagram
+const smallScreen = window.matchMedia('(max-width: 959px), (max-height: 599px)');
+const smallScreenNotice = document.querySelector('#small-screen');
+
+// dismissed until the page is loaded again
+let smallScreenDismissed = false;
+
+function updateSmallScreenNotice() {
+  smallScreenNotice.hidden = !smallScreen.matches || smallScreenDismissed;
+}
+
+smallScreenNotice.querySelector('button').addEventListener('click', () => {
+  smallScreenDismissed = true;
+  updateSmallScreenNotice();
+});
+
+smallScreen.addEventListener('change', updateSmallScreenNotice);
+
+updateSmallScreenNotice();
+
+
 // drag and drop, deep linking //////////
 
 document.body.addEventListener('dragover', event => event.preventDefault());
