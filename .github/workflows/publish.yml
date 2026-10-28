@@ -8,8 +8,7 @@ on:
 permissions:
   contents: read
 
-  # trusted publishing: npm accepts publishes from this workflow, without
-  # token, and links the published package to the workflow run (provenance)
+  # npm provenance: links the published package to this workflow run
   id-token: write
 
 jobs:
@@ -24,12 +23,11 @@ jobs:
           cache: npm
           registry-url: https://registry.npmjs.org
 
-      # with the npm of Node, as later ones refuse git dependencies (bpmn-js-toolbar) by default
       - run: npm ci
 
       - run: npm test
 
-      # trusted publishing needs npm 11.5.1 or later
-      - run: npm install -g npm@latest
-
-      - run: npm publish --access public
+      # with a granular access token (publish, bypassing 2FA) as repository secret NPM_TOKEN
+      - run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
