@@ -11,7 +11,6 @@ const GLYPHS = [
   'lasso-tool',
   'space-tool',
   'connection',
-  'connection-multi',
   'screw-wrench',
   'trash',
   'task',
