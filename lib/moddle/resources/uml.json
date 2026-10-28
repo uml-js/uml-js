@@ -800,6 +800,28 @@
       ]
     },
     {
+      "name": "StructuredActivityNode",
+      "superClass": [
+        "Action"
+      ],
+      "properties": [
+        {
+          "name": "node",
+          "type": "ActivityNode",
+          "isMany": true
+        },
+        {
+          "name": "edge",
+          "type": "ActivityEdge",
+          "isMany": true
+        },
+        {
+          "name": "mustIsolate",
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
       "name": "ControlNode",
       "isAbstract": true,
       "superClass": [
