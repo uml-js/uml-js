@@ -345,25 +345,27 @@ function ignoreAbort(error) {
 
 // small screens //////////
 
-// windows too small for palette, toolbar and diagram
-const smallScreen = window.matchMedia('(max-width: 959px), (max-height: 599px)');
-const smallScreenNotice = document.querySelector('#small-screen');
+// disabled for now, the app behaves well enough on small and touch screens
 
-// dismissed until the page is loaded again
-let smallScreenDismissed = false;
-
-function updateSmallScreenNotice() {
-  smallScreenNotice.hidden = !smallScreen.matches || smallScreenDismissed;
-}
-
-smallScreenNotice.querySelector('button').addEventListener('click', () => {
-  smallScreenDismissed = true;
-  updateSmallScreenNotice();
-});
-
-smallScreen.addEventListener('change', updateSmallScreenNotice);
-
-updateSmallScreenNotice();
+// // windows too small for palette, toolbar and diagram
+// const smallScreen = window.matchMedia('(max-width: 959px), (max-height: 599px)');
+// const smallScreenNotice = document.querySelector('#small-screen');
+//
+// // dismissed until the page is loaded again
+// let smallScreenDismissed = false;
+//
+// function updateSmallScreenNotice() {
+//   smallScreenNotice.hidden = !smallScreen.matches || smallScreenDismissed;
+// }
+//
+// smallScreenNotice.querySelector('button').addEventListener('click', () => {
+//   smallScreenDismissed = true;
+//   updateSmallScreenNotice();
+// });
+//
+// smallScreen.addEventListener('change', updateSmallScreenNotice);
+//
+// updateSmallScreenNotice();
 
 
 // touch //////////

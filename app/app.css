@@ -18,6 +18,8 @@ body {
 }
 
 /* notice for windows too small for palette, toolbar and diagram */
+/* disabled for now, as in app.js
+
 .small-screen {
   position: fixed;
   top: 16px;
@@ -51,6 +53,7 @@ body {
   color: #fff;
   cursor: pointer;
 }
+*/
 
 /* diagram tabs, shown for models with multiple diagrams */
 #views {
