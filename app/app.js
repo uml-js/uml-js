@@ -72,31 +72,124 @@ modeler.on('views.changed', ({ views, activeView }) => {
 
   focusCanvas();
 
-  viewsNav.innerHTML = '';
+  updateTabs(views, activeView);
+});
+
+
+// tabs //////////
+
+// the tab of each view, kept as long as the view exists, so that double clicks reach it
+const tabs = new Map();
+
+/**
+ * One tab per diagram of models with several, for opening it, renaming it
+ * (double click) and deleting it (trash, on the tab of the diagram shown).
+ */
+function updateTabs(views, activeView) {
   viewsNav.hidden = views.length < 2;
 
-  for (const view of views) {
-    const button = document.createElement('button');
-
-    button.textContent = view.name;
-    button.classList.toggle('active', view === activeView);
-    button.addEventListener('click', () => modeler.open(view));
-
-    viewsNav.appendChild(button);
-
-    // the diagram shown can be deleted, which is undone in the diagram shown then
-    if (view === activeView) {
-      const deleteButton = document.createElement('button');
-
-      deleteButton.className = 'active delete';
-      deleteButton.title = 'Delete diagram';
-      deleteButton.innerHTML = DISCARD_ICON;
-      deleteButton.addEventListener('click', () => modeler.deleteView(view));
-
-      viewsNav.appendChild(deleteButton);
+  for (const view of tabs.keys()) {
+    if (!views.includes(view)) {
+      tabs.delete(view);
     }
   }
-});
+
+  const elements = views.map(view => {
+    let tab = tabs.get(view);
+
+    if (!tab) {
+      tabs.set(view, tab = createTab(view));
+    }
+
+    tab.querySelector('.name').textContent = view.name;
+    tab.classList.toggle('active', view === activeView);
+
+    return tab;
+  });
+
+  // keep tabs in place unless diagrams were added or removed
+  if (elements.some((tab, index) => viewsNav.children[index] !== tab) || viewsNav.children.length !== elements.length) {
+    viewsNav.replaceChildren(...elements);
+  }
+}
+
+function createTab(view) {
+  const tab = document.createElement('div');
+
+  tab.className = 'tab';
+  tab.innerHTML = `<button class="name" title="Double click to rename"></button><button class="delete" title="Delete diagram">${ DISCARD_ICON }</button>`;
+
+  const nameButton = tab.querySelector('.name');
+
+  nameButton.addEventListener('click', () => {
+    if (view === modeler.getActiveView()) {
+      focusCanvas();
+    } else {
+      modeler.open(view);
+    }
+  });
+
+  nameButton.addEventListener('dblclick', () => editTabName(tab, view));
+
+  // undone in the diagram shown then
+  tab.querySelector('.delete').addEventListener('click', () => modeler.deleteView(view));
+
+  return tab;
+}
+
+/**
+ * Edits the name of a diagram and of the activity or state machine it shows in place,
+ * confirmed with Enter or by clicking elsewhere, cancelled with Escape.
+ */
+function editTabName(tab, view) {
+  const nameButton = tab.querySelector('.name');
+
+  const input = document.createElement('input');
+
+  input.value = view.name;
+  input.size = Math.max(view.name.length, 4);
+
+  let done = false;
+
+  function finish(confirmed) {
+    if (done) {
+      return;
+    }
+
+    done = true;
+
+    const name = input.value.trim();
+
+    input.remove();
+    nameButton.hidden = false;
+
+    if (confirmed && name && name !== view.name) {
+      modeler.renameView(view, name);
+    } else {
+      focusCanvas();
+    }
+  }
+
+  input.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+      finish(true);
+    } else if (event.key === 'Escape') {
+      finish(false);
+    }
+  });
+
+  input.addEventListener('input', () => {
+    input.size = Math.max(input.value.length, 4);
+  });
+
+  input.addEventListener('blur', () => finish(true));
+
+  nameButton.hidden = true;
+  tab.insertBefore(input, nameButton);
+
+  input.focus();
+  input.select();
+}
 
 
 async function openXML(xml, name) {

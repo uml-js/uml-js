@@ -33,6 +33,11 @@ describe('moddle - XMI', function() {
 
     expect(diagram.modelElement[0]).toBe(stateMachine);
 
+    const openState = stateMachine.region[0].subvertex.find(v => v.id === 'Open');
+
+    expect(openState.submachine).toBe(model.packagedElement[1]);
+    expect(openState.submachine.name).toBe('OpenDoor');
+
     const lockedShape = diagram.ownedElement.find(e => e.id === 'Locked_di');
 
     expect(lockedShape.bounds).toMatchObject({ x: 160, y: 330, width: 450, height: 160 });

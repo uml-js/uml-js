@@ -70,7 +70,12 @@ body {
   display: none;
 }
 
-#views button {
+#views .tab {
+  display: flex;
+}
+
+#views button,
+#views input {
   font: inherit;
   padding: 3px 10px;
   border: 1px solid hsl(225, 10%, 75%);
@@ -80,18 +85,34 @@ body {
   cursor: pointer;
 }
 
-#views button.active {
+#views button[hidden] {
+  display: none;
+}
+
+#views .tab.active button {
   background: hsl(205, 100%, 50%);
   border-color: hsl(205, 100%, 50%);
   color: #fff;
 }
 
+/* the name of a diagram, edited in place (double click) */
+#views input {
+  border-color: hsl(205, 100%, 50%);
+  background: #fff;
+  cursor: text;
+  outline: none;
+}
+
 /* the trash button, joined to the tab of the diagram shown */
-#views button.delete {
+#views .tab .delete {
   display: flex;
   align-items: center;
-  margin-left: -4px;
+  margin-left: -1px;
   padding: 0 7px 0 2px;
+}
+
+#views .tab:not(.active) .delete {
+  display: none;
 }
 
 #views button.delete svg {
