@@ -58,7 +58,20 @@ let fileName = 'diagram';
 // whether the model is discarded (see #discard), but can be restored
 let discarded = false;
 
+// diagrams shown before, which keep where they were scrolled and zoomed to
+const shownViews = new WeakSet();
+
 modeler.on('views.changed', ({ views, activeView }) => {
+
+  // diagrams are centered when first shown, e.g. after drilling down
+  if (activeView && !shownViews.has(activeView)) {
+    shownViews.add(activeView);
+
+    center();
+  }
+
+  focusCanvas();
+
   viewsNav.innerHTML = '';
   viewsNav.hidden = views.length < 2;
 
@@ -70,8 +83,21 @@ modeler.on('views.changed', ({ views, activeView }) => {
     button.addEventListener('click', () => modeler.open(view));
 
     viewsNav.appendChild(button);
+
+    // the diagram shown can be deleted, which is undone in the diagram shown then
+    if (view === activeView) {
+      const deleteButton = document.createElement('button');
+
+      deleteButton.className = 'active delete';
+      deleteButton.title = 'Delete diagram';
+      deleteButton.innerHTML = DISCARD_ICON;
+      deleteButton.addEventListener('click', () => modeler.deleteView(view));
+
+      viewsNav.appendChild(deleteButton);
+    }
   }
 });
+
 
 async function openXML(xml, name) {
   try {
@@ -95,6 +121,18 @@ async function openXML(xml, name) {
     setModelButtonsEnabled(true);
   } catch (error) {
     console.error(`failed to open ${ name }`, error);
+  }
+}
+
+/**
+ * Keyboard shortcuts, e.g. Ctrl+Z, apply to the diagram focused, which clicking
+ * buttons outside of it, e.g. tabs or drill-down buttons, does not.
+ */
+function focusCanvas() {
+  const viewer = modeler.getActiveViewer();
+
+  if (viewer) {
+    viewer.get('canvas').focus();
   }
 }
 

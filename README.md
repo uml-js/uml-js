@@ -55,6 +55,9 @@ await modeler.importXML(xml);              // opens the first diagram
 modeler.getViews();                        // the diagrams in the file
 await modeler.open(modeler.getViews()[1]);
 
+await modeler.drillDown(activity);         // a diagram of e.g. a called activity, created if missing
+modeler.getPath();                         // the diagrams drilled down into
+
 const { xml } = await modeler.saveXML();
 const { svg } = await modeler.saveSVG();   // the diagram shown
 ```

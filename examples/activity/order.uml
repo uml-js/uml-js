@@ -5,7 +5,7 @@
       <node xmi:type="uml:InitialNode" xmi:id="initial" outgoing="f1"/>
       <node xmi:type="uml:OpaqueAction" xmi:id="receive" name="Receive order" incoming="f1" outgoing="f2"/>
       <node xmi:type="uml:DecisionNode" xmi:id="decision" incoming="f2" outgoing="f3 f4"/>
-      <node xmi:type="uml:OpaqueAction" xmi:id="ship" name="Ship order" incoming="f3" outgoing="f5"/>
+      <node xmi:type="uml:CallBehaviorAction" xmi:id="ship" name="Ship order" incoming="f3" outgoing="f5" behavior="ShipOrder"/>
       <node xmi:type="uml:OpaqueAction" xmi:id="reject" name="Reject order" incoming="f4" outgoing="f11"/>
       <node xmi:type="uml:ForkNode" xmi:id="fork" incoming="f5" outgoing="f6 f7"/>
       <node xmi:type="uml:OpaqueAction" xmi:id="invoice" name="Send invoice" incoming="f6" outgoing="f8"/>
@@ -33,6 +33,15 @@
       <edge xmi:type="uml:ControlFlow" xmi:id="f10" source="join" target="merge"/>
       <edge xmi:type="uml:ControlFlow" xmi:id="f11" source="reject" target="merge"/>
       <edge xmi:type="uml:ControlFlow" xmi:id="f12" source="merge" target="final"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Activity" xmi:id="ShipOrder" name="Ship order">
+      <node xmi:type="uml:InitialNode" xmi:id="ship_initial" outgoing="s1"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="pack" name="Pack items" incoming="s1" outgoing="s2"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="handover" name="Hand over to carrier" incoming="s2" outgoing="s3"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="ship_final" incoming="s3"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="s1" source="ship_initial" target="pack"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="s2" source="pack" target="handover"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="s3" source="handover" target="ship_final"/>
     </packagedElement>
   </uml:Model>
   <umldi:UMLActivityDiagram xmi:id="ProcessOrder_diagram" name="Process order" modelElement="ProcessOrder">
@@ -125,6 +134,32 @@
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f12_di" modelElement="f12" source="merge_di" target="final_di">
       <waypoint x="886" y="170"/>
       <waypoint x="940" y="170"/>
+    </ownedElement>
+  </umldi:UMLActivityDiagram>
+  <umldi:UMLActivityDiagram xmi:id="ShipOrder_diagram" name="Ship order" modelElement="ShipOrder">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="ship_initial_di" modelElement="ship_initial">
+      <bounds x="40" y="48" width="24" height="24"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="pack_di" modelElement="pack">
+      <bounds x="110" y="30" width="120" height="60"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="handover_di" modelElement="handover">
+      <bounds x="290" y="30" width="120" height="60"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="ship_final_di" modelElement="ship_final">
+      <bounds x="470" y="45" width="30" height="30"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="s1_di" modelElement="s1" source="ship_initial_di" target="pack_di">
+      <waypoint x="64" y="60"/>
+      <waypoint x="110" y="60"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="s2_di" modelElement="s2" source="pack_di" target="handover_di">
+      <waypoint x="230" y="60"/>
+      <waypoint x="290" y="60"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="s3_di" modelElement="s3" source="handover_di" target="ship_final_di">
+      <waypoint x="410" y="60"/>
+      <waypoint x="470" y="60"/>
     </ownedElement>
   </umldi:UMLActivityDiagram>
 </xmi:XMI>

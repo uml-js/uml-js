@@ -766,6 +766,40 @@
       ]
     },
     {
+      "name": "InvocationAction",
+      "isAbstract": true,
+      "superClass": [
+        "Action"
+      ]
+    },
+    {
+      "name": "CallAction",
+      "isAbstract": true,
+      "superClass": [
+        "InvocationAction"
+      ],
+      "properties": [
+        {
+          "name": "isSynchronous",
+          "type": "Boolean",
+          "default": true
+        }
+      ]
+    },
+    {
+      "name": "CallBehaviorAction",
+      "superClass": [
+        "CallAction"
+      ],
+      "properties": [
+        {
+          "name": "behavior",
+          "type": "Behavior",
+          "isReference": true
+        }
+      ]
+    },
+    {
       "name": "ControlNode",
       "isAbstract": true,
       "superClass": [

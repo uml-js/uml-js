@@ -199,6 +199,12 @@ describe('moddle - XMI activity diagrams', function() {
     expect(activity.node.find(n => n.id === 'decision').outgoing.map(f => f.id)).toEqual([ 'f3', 'f4' ]);
     expect(activity.edge.find(e => e.id === 'f3').guard.body).toEqual([ 'in stock' ]);
 
+    const ship = activity.node.find(n => n.id === 'ship');
+
+    expect(ship.$type).toBe('uml:CallBehaviorAction');
+    expect(ship.behavior).toBe(model.packagedElement[1]);
+    expect(ship.behavior.name).toBe('Ship order');
+
     const { xml } = await moddle.toXML(document);
     const { document: reimported } = await moddle.fromXML(xml);
 
