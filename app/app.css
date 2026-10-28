@@ -89,6 +89,11 @@ body {
   min-height: 0;
 }
 
+/* touch gestures on the diagram pan and zoom it (see app.js), rather than the browser's page */
+#canvas .djs-container {
+  touch-action: none;
+}
+
 /* the link to the repository takes the place the toolbar leaves for the bpmn.io logo of bpmn-js */
 
 .bpmn-toolbar .repo-link {

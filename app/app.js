@@ -366,6 +366,70 @@ smallScreen.addEventListener('change', updateSmallScreenNotice);
 updateSmallScreenNotice();
 
 
+// touch //////////
+
+/**
+ * Panning with one finger and zooming with two on the diagram, which diagram-js
+ * only does with a mouse. Taps still select, as the browser follows them with
+ * mouse events; mouse and pen are left to diagram-js.
+ */
+const IGNORED_FOR_TOUCH = '.djs-palette, .djs-context-pad, .djs-popup, .djs-direct-editing-parent';
+
+const diagramsElement = canvasElement.querySelector('.uml-js');
+
+// position of each finger on the diagram, by pointer id
+const touches = new Map();
+
+diagramsElement.addEventListener('pointerdown', (event) => {
+  if (event.pointerType !== 'touch' || !event.target.closest('.djs-container') || event.target.closest(IGNORED_FOR_TOUCH)) {
+    return;
+  }
+
+  touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
+});
+
+diagramsElement.addEventListener('pointermove', (event) => {
+  const previous = touches.get(event.pointerId);
+  const viewer = modeler.getActiveViewer();
+
+  if (!previous || !viewer) {
+    return;
+  }
+
+  const canvas = viewer.get('canvas');
+  const current = { x: event.clientX, y: event.clientY };
+
+  if (touches.size === 1) {
+    canvas.scroll({ dx: current.x - previous.x, dy: current.y - previous.y });
+  } else if (touches.size === 2) {
+    const other = [ ...touches ].find(([ id ]) => id !== event.pointerId)[1];
+
+    const previousDistance = Math.hypot(previous.x - other.x, previous.y - other.y);
+    const distance = Math.hypot(current.x - other.x, current.y - other.y);
+
+    const rect = canvas.getContainer().getBoundingClientRect();
+
+    const previousCenter = { x: (previous.x + other.x) / 2, y: (previous.y + other.y) / 2 };
+    const center = { x: (current.x + other.x) / 2, y: (current.y + other.y) / 2 };
+
+    canvas.scroll({ dx: center.x - previousCenter.x, dy: center.y - previousCenter.y });
+
+    // within the zoom range of diagram-js' mouse wheel zooming
+    if (previousDistance > 0) {
+      const scale = Math.min(4, Math.max(0.2, canvas.zoom() * distance / previousDistance));
+
+      canvas.zoom(scale, { x: center.x - rect.left, y: center.y - rect.top });
+    }
+  }
+
+  touches.set(event.pointerId, current);
+});
+
+for (const type of [ 'pointerup', 'pointercancel' ]) {
+  diagramsElement.addEventListener(type, (event) => touches.delete(event.pointerId));
+}
+
+
 // drag and drop, deep linking //////////
 
 document.body.addEventListener('dragover', event => event.preventDefault());
