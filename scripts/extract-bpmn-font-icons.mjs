@@ -9,6 +9,7 @@ import { createRequire } from 'node:module';
 const GLYPHS = [
   'hand-tool',
   'lasso-tool',
+  'space-tool',
   'connection',
   'connection-multi',
   'screw-wrench',
