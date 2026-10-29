@@ -4,6 +4,7 @@ import UmlModdle from '../lib/moddle/index.js';
 import UmlFactory from '../lib/core/modeling/UmlFactory.js';
 
 import {
+  getEditedLabelText,
   getLabelProperties,
   getStateText,
   getTransitionText,
@@ -30,6 +31,20 @@ describe('state-machine - LabelUtil', function() {
       expect(parseTransitionText('/ go')).toEqual({ triggers: [], guard: '', effect: 'go' });
       expect(parseTransitionText('')).toEqual({ triggers: [], guard: '', effect: '' });
     });
+
+    it('should ignore line breaks', function() {
+      expect(parseTransitionText('all children\ndone\n/ check feasibility')).toEqual({
+        triggers: [ 'all children done' ],
+        guard: '',
+        effect: 'check feasibility'
+      });
+    });
+  });
+
+
+  it('should keep edited label text only if it breaks lines', function() {
+    expect(getEditedLabelText('done\r\n/ check ')).toBe('done\n/ check');
+    expect(getEditedLabelText('done / check')).toBe(undefined);
   });
 
 
