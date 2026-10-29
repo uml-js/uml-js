@@ -81,9 +81,13 @@ modeler.on('views.changed', ({ views, activeView }) => {
 // the tab of each view, kept as long as the view exists, so that double clicks reach it
 const tabs = new Map();
 
+// distance the pointer moves before a tab is dragged rather than clicked
+const TAB_DRAG_THRESHOLD = 5;
+
 /**
  * One tab per diagram of models with several, for opening it, renaming it
- * (double click) and deleting it (trash, on the tab of the diagram shown).
+ * (double click), deleting it (trash, on the tab of the diagram shown) and
+ * moving it among the others (drag).
  */
 function updateTabs(views, activeView) {
   viewsNav.hidden = views.length < 2;
@@ -122,6 +126,14 @@ function createTab(view) {
   const nameButton = tab.querySelector('.name');
 
   nameButton.addEventListener('click', () => {
+
+    // released after dragging the tab
+    if (tab.dragged) {
+      tab.dragged = false;
+
+      return;
+    }
+
     if (view === modeler.getActiveView()) {
       focusCanvas();
     } else {
@@ -134,7 +146,86 @@ function createTab(view) {
   // undone in the diagram shown then
   tab.querySelector('.delete').addEventListener('click', () => modeler.deleteView(view));
 
+  tab.addEventListener('pointerdown', event => dragTab(event, tab, view));
+
   return tab;
+}
+
+/**
+ * Moves a tab, and the diagram it shows, to where it is dropped among the tabs,
+ * marking the place while dragging; undone in the diagram shown then.
+ */
+function dragTab(event, tab, view) {
+  if (event.button !== 0 || event.target.closest('input, .delete')) {
+    return;
+  }
+
+  const startX = event.clientX;
+
+  let index = -1;
+
+  tab.dragged = false;
+
+  function move(event) {
+    if (!tab.dragged && Math.abs(event.clientX - startX) < TAB_DRAG_THRESHOLD) {
+      return;
+    }
+
+    tab.dragged = true;
+    tab.classList.add('dragging');
+
+    index = getTabDropIndex(event.clientX);
+
+    markTabDrop(index);
+  }
+
+  function end() {
+    window.removeEventListener('pointermove', move);
+    window.removeEventListener('pointerup', end);
+    window.removeEventListener('pointercancel', end);
+
+    tab.classList.remove('dragging');
+    markTabDrop(-1);
+
+    if (!tab.dragged) {
+      return;
+    }
+
+    const from = modeler.getViews().indexOf(view);
+
+    // the index among the tabs without the one moved
+    modeler.moveView(view, index > from ? index - 1 : index);
+  }
+
+  window.addEventListener('pointermove', move);
+  window.addEventListener('pointerup', end);
+  window.addEventListener('pointercancel', end);
+}
+
+/**
+ * @param {number} x
+ *
+ * @return {number} the index among the tabs to drop a tab before, the number of tabs to drop it after the last
+ */
+function getTabDropIndex(x) {
+  const elements = [ ...viewsNav.children ];
+
+  const index = elements.findIndex(element => {
+    const { left, width } = element.getBoundingClientRect();
+
+    return x < left + width / 2;
+  });
+
+  return index === -1 ? elements.length : index;
+}
+
+function markTabDrop(index) {
+  const elements = [ ...viewsNav.children ];
+
+  elements.forEach((element, i) => {
+    element.classList.toggle('drop-before', i === index);
+    element.classList.toggle('drop-after', i === elements.length - 1 && index === elements.length);
+  });
 }
 
 /**

@@ -72,6 +72,20 @@ body {
 
 #views .tab {
   display: flex;
+  user-select: none;
+}
+
+/* a tab dragged to another place among the tabs, which is marked */
+#views .tab.dragging {
+  opacity: 0.5;
+}
+
+#views .tab.drop-before {
+  box-shadow: -3px 0 0 hsl(205, 100%, 50%);
+}
+
+#views .tab.drop-after {
+  box-shadow: 3px 0 0 hsl(205, 100%, 50%);
 }
 
 #views button,
