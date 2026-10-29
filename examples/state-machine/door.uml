@@ -81,9 +81,9 @@
     <ownedElement xmi:type="umldi:UMLStateShape" xmi:id="Open_di" modelElement="Open">
       <bounds x="480" y="120" width="140" height="80"/>
       <ownedElement xmi:type="umldi:UMLShape" xmi:id="Open_slammed_di" modelElement="Open_slammed">
-        <bounds x="590" y="190" width="20" height="20"/>
+        <bounds x="550" y="190" width="20" height="20"/>
         <ownedElement xmi:type="umldi:UMLLabel" xmi:id="Open_slammed_label" modelElement="Open_slammed">
-          <bounds x="614" y="206" width="56" height="20"/>
+          <bounds x="574" y="206" width="56" height="20"/>
         </ownedElement>
       </ownedElement>
     </ownedElement>
@@ -135,8 +135,8 @@
       </ownedElement>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="t_slammed_di" modelElement="t_slammed" source="Open_slammed_di" target="Closed_di">
-      <waypoint x="600" y="210"/>
-      <waypoint x="600" y="240"/>
+      <waypoint x="560" y="210"/>
+      <waypoint x="560" y="240"/>
       <waypoint x="305" y="240"/>
       <waypoint x="305" y="190"/>
     </ownedElement>
