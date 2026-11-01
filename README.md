@@ -64,6 +64,8 @@ const { svg } = await modeler.saveSVG();   // the diagram shown
 
 Use `UmlViewer` to show diagrams read-only.
 
+Deleting a view with `modeler.deleteView(view)` removes its diagram. The model elements it shows are kept, with one exception: a state machine or activity that was shown by the diagram is left out when saving if by then nothing else refers to it or to anything it contains, since it could otherwise neither be seen nor reached. It stays in the model until then, so that undoing any change restores a consistent model and a saved file has no dangling references.
+
 
 ## Development
 
