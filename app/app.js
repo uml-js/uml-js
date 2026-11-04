@@ -6,7 +6,7 @@ import createToolbar, {
   CENTER_ICON
 } from 'bpmn-js-toolbar';
 
-import { DIAGRAM_TYPES, UmlModeler, UmlModdle } from '../lib/uml.js';
+import { DIAGRAM_TYPES, UmlModeler, UmlModdle, UmlViewer } from '../lib/uml.js';
 
 import stateMachinePreviewXML from './previews/state-machine.uml?raw';
 import classPreviewXML from './previews/class.uml?raw';
@@ -41,6 +41,9 @@ const EXAMPLES = {
   'use-case': 'examples/use-case/shop.uml'
 };
 
+const LOCKED_ICON = '<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+const UNLOCKED_ICON = '<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>';
+
 const DISCARD_ICON = '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
 
 const PICKER_ID = 'uml-js';
@@ -53,6 +56,19 @@ const viewsNav = document.querySelector('#views');
 
 const modeler = new UmlModeler({ container: canvasElement });
 
+// the model shown read-only while locked (see #setLocked), a copy of the model of the modeler,
+// which is kept along with the undo history of its diagrams
+const viewer = new UmlViewer();
+
+let locked = false;
+
+/**
+ * @return {UmlModeler|UmlViewer} the modeler, or the viewer while locked
+ */
+function shown() {
+  return locked ? viewer : modeler;
+}
+
 let fileName = 'diagram';
 
 // whether the model is discarded (see #discard), but can be restored
@@ -61,19 +77,26 @@ let discarded = false;
 // diagrams shown before, which keep where they were scrolled and zoomed to
 const shownViews = new WeakSet();
 
-modeler.on('views.changed', ({ views, activeView }) => {
+for (const manager of [ modeler, viewer ]) {
+  manager.on('views.changed', ({ views, activeView }) => {
 
-  // diagrams are centered when first shown, e.g. after drilling down
-  if (activeView && !shownViews.has(activeView)) {
-    shownViews.add(activeView);
+    // the modeler changes while locked only when a model is opened, and is shown as the viewer was
+    if (manager !== shown()) {
+      return;
+    }
 
-    center();
-  }
+    // diagrams are centered when first shown, e.g. after drilling down
+    if (activeView && !shownViews.has(activeView)) {
+      shownViews.add(activeView);
 
-  focusCanvas();
+      center();
+    }
 
-  updateTabs(views, activeView);
-});
+    focusCanvas();
+
+    updateTabs(views, activeView);
+  });
+}
 
 
 // tabs //////////
@@ -87,7 +110,7 @@ const TAB_DRAG_THRESHOLD = 5;
 /**
  * One tab per diagram of models with several, for opening it, renaming it
  * (double click), deleting it (trash, on the tab of the diagram shown) and
- * moving it among the others (drag).
+ * moving it among the others (drag); only for opening it while locked.
  */
 function updateTabs(views, activeView) {
   viewsNav.hidden = views.length < 2;
@@ -105,7 +128,11 @@ function updateTabs(views, activeView) {
       tabs.set(view, tab = createTab(view));
     }
 
-    tab.querySelector('.name').textContent = view.name;
+    const nameButton = tab.querySelector('.name');
+
+    nameButton.textContent = view.name;
+    nameButton.title = locked ? '' : 'Double click to rename';
+
     tab.classList.toggle('active', view === activeView);
 
     return tab;
@@ -121,7 +148,7 @@ function createTab(view) {
   const tab = document.createElement('div');
 
   tab.className = 'tab';
-  tab.innerHTML = `<button class="name" title="Double click to rename"></button><button class="delete" title="Delete diagram">${ DISCARD_ICON }</button>`;
+  tab.innerHTML = `<button class="name"></button><button class="delete" title="Delete diagram">${ DISCARD_ICON }</button>`;
 
   const nameButton = tab.querySelector('.name');
 
@@ -134,14 +161,18 @@ function createTab(view) {
       return;
     }
 
-    if (view === modeler.getActiveView()) {
+    if (view === shown().getActiveView()) {
       focusCanvas();
     } else {
-      modeler.open(view);
+      shown().open(view);
     }
   });
 
-  nameButton.addEventListener('dblclick', () => editTabName(tab, view));
+  nameButton.addEventListener('dblclick', () => {
+    if (!locked) {
+      editTabName(tab, view);
+    }
+  });
 
   // undone in the diagram shown then
   tab.querySelector('.delete').addEventListener('click', () => modeler.deleteView(view));
@@ -156,7 +187,7 @@ function createTab(view) {
  * marking the place while dragging; undone in the diagram shown then.
  */
 function dragTab(event, tab, view) {
-  if (event.button !== 0 || event.target.closest('input, .delete')) {
+  if (locked || event.button !== 0 || event.target.closest('input, .delete')) {
     return;
   }
 
@@ -287,6 +318,10 @@ async function openXML(xml, name) {
   try {
     const { warnings } = await modeler.importXML(xml);
 
+    if (locked) {
+      await viewer.importXML(xml);
+    }
+
     fileName = name.replace(/\.[^.]+$/, '');
     document.title = `${ fileName }.uml - UML.js`;
 
@@ -313,19 +348,93 @@ async function openXML(xml, name) {
  * buttons outside of it, e.g. tabs or drill-down buttons, does not.
  */
 function focusCanvas() {
-  const viewer = modeler.getActiveViewer();
+  const diagram = shown().getActiveViewer();
 
-  if (viewer) {
-    viewer.get('canvas').focus();
+  if (diagram) {
+    diagram.get('canvas').focus();
   }
 }
 
 function center() {
-  const viewer = modeler.getActiveViewer();
+  const diagram = shown().getActiveViewer();
 
-  if (viewer) {
-    viewer.get('canvas').zoom('fit-viewport', 'auto');
+  if (diagram) {
+    diagram.get('canvas').zoom('fit-viewport', 'auto');
   }
+}
+
+
+// locking //////////
+
+/**
+ * Shows the model read-only, in a viewer, or for editing again. Locking shows a copy of the
+ * model in the viewer; unlocking shows the modeler again, unchanged and with its undo history.
+ * Both show the diagram the other showed, scrolled and zoomed alike.
+ *
+ * @param {boolean} value
+ */
+async function setLocked(value) {
+  if (value === locked) {
+    return;
+  }
+
+  const from = shown();
+  const to = value ? viewer : modeler;
+
+  const fromView = from.getActiveView();
+  const viewbox = from.getActiveViewer() && from.getActiveViewer().get('canvas').viewbox();
+
+  from.detach();
+  to.attachTo(canvasElement);
+
+  locked = value;
+
+  document.body.classList.toggle('locked', locked);
+
+  toolbar.setPressed('lock', locked);
+
+  const lockButton = toolbar.element.querySelector('[data-action="lock"]');
+
+  lockButton.innerHTML = locked ? LOCKED_ICON : UNLOCKED_ICON;
+  lockButton.title = locked ? 'Unlock for editing' : 'Lock for viewing';
+
+  const url = new URL(window.location.href);
+
+  if (locked) {
+    url.searchParams.set('mode', 'view');
+  } else {
+    url.searchParams.delete('mode');
+  }
+
+  window.history.replaceState(null, '', url);
+
+  // no model yet, e.g. when opening one locked
+  if (!modeler.getDocument()) {
+    return;
+  }
+
+  if (locked) {
+    const { xml } = await modeler.saveXML();
+
+    await viewer.importXML(xml);
+  }
+
+  // diagrams added while locked, e.g. by drilling down, are not in the modeler
+  const view = fromView && to.getViews().find(view => view.id === fromView.id) || to.getActiveView();
+
+  if (view && view !== to.getActiveView()) {
+    await to.open(view);
+  }
+
+  shownViews.add(to.getActiveView());
+
+  if (viewbox) {
+    to.getActiveViewer().get('canvas').viewbox(viewbox);
+  }
+
+  updateTabs(to.getViews(), to.getActiveView());
+
+  focusCanvas();
 }
 
 
@@ -411,10 +520,10 @@ async function showPreview(container, diagramType, xml) {
  */
 const toolbar = createToolbar({
   get: (name) => {
-    const viewer = modeler.getActiveViewer();
+    const diagram = shown().getActiveViewer();
 
-    if (viewer) {
-      return viewer.get(name);
+    if (diagram) {
+      return diagram.get(name);
     }
 
     if (name === 'canvas') {
@@ -425,7 +534,7 @@ const toolbar = createToolbar({
   },
   importXML: (xml) => openXML(xml, fileName),
   saveXML: (options) => modeler.saveXML(options),
-  saveSVG: () => modeler.saveSVG()
+  saveSVG: () => shown().saveSVG()
 }, {
   container: canvasElement,
   fileName,
@@ -433,10 +542,11 @@ const toolbar = createToolbar({
     'load': { icon: LOAD_ICON, title: 'Load UML model', action: load },
     'save': { icon: SAVE_ICON, title: 'Save UML model', action: save },
     'discard': { icon: DISCARD_ICON, title: 'Discard model', action: discard },
-    'center': { icon: CENTER_ICON, title: 'Center', action: center }
+    'center': { icon: CENTER_ICON, title: 'Center', action: center },
+    'lock': { icon: UNLOCKED_ICON, type: 'toggle', title: 'Lock for viewing', action: value => setLocked(value) }
   },
   configurations: {
-    uml: [ 'load', 'save', 'export', 'center', 'zoom-in', 'zoom-out', 'discard' ]
+    uml: [ 'load', 'save', 'export', 'center', 'zoom-in', 'zoom-out', 'lock', 'discard' ]
   },
   configuration: 'uml'
 });
@@ -479,7 +589,7 @@ function discard() {
 
 function restore() {
   startScreen.hidden = true;
-  viewsNav.hidden = modeler.getViews().length < 2;
+  viewsNav.hidden = shown().getViews().length < 2;
 
   document.title = `${ fileName }.uml - UML.js`;
 
@@ -599,12 +709,10 @@ function ignoreAbort(error) {
  */
 const IGNORED_FOR_TOUCH = '.djs-palette, .djs-context-pad, .djs-popup, .djs-direct-editing-parent';
 
-const diagramsElement = canvasElement.querySelector('.uml-js');
-
 // position of each finger on the diagram, by pointer id
 const touches = new Map();
 
-diagramsElement.addEventListener('pointerdown', (event) => {
+canvasElement.addEventListener('pointerdown', (event) => {
   if (event.pointerType !== 'touch' || !event.target.closest('.djs-container') || event.target.closest(IGNORED_FOR_TOUCH)) {
     return;
   }
@@ -612,15 +720,15 @@ diagramsElement.addEventListener('pointerdown', (event) => {
   touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
 });
 
-diagramsElement.addEventListener('pointermove', (event) => {
+canvasElement.addEventListener('pointermove', (event) => {
   const previous = touches.get(event.pointerId);
-  const viewer = modeler.getActiveViewer();
+  const diagram = shown().getActiveViewer();
 
-  if (!previous || !viewer) {
+  if (!previous || !diagram) {
     return;
   }
 
-  const canvas = viewer.get('canvas');
+  const canvas = diagram.get('canvas');
   const current = { x: event.clientX, y: event.clientY };
 
   if (touches.size === 1) {
@@ -650,7 +758,7 @@ diagramsElement.addEventListener('pointermove', (event) => {
 });
 
 for (const type of [ 'pointerup', 'pointercancel' ]) {
-  diagramsElement.addEventListener(type, (event) => touches.delete(event.pointerId));
+  canvasElement.addEventListener(type, (event) => touches.delete(event.pointerId));
 }
 
 
@@ -683,11 +791,18 @@ async function openURL(url) {
 
 // for debugging
 window.modeler = modeler;
+window.viewer = viewer;
 
 createStartScreen().then(async () => {
+  const params = new URL(window.location.href).searchParams;
+
+  // ?mode=view opens models locked, for viewing
+  if (params.get('mode') === 'view') {
+    await setLocked(true);
+  }
 
   // optional deep linking, as in the BPMN workbench: ?src=<url> opens a model on startup
-  const src = new URL(window.location.href).searchParams.get('src');
+  const src = params.get('src');
 
   if (!src) {
     return;

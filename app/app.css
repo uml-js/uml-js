@@ -125,7 +125,8 @@ body {
   padding: 0 7px 0 2px;
 }
 
-#views .tab:not(.active) .delete {
+#views .tab:not(.active) .delete,
+.locked #views .tab .delete {
   display: none;
 }
 
