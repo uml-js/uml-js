@@ -62,7 +62,24 @@ const { xml } = await modeler.saveXML();
 const { svg } = await modeler.saveSVG();   // the diagram shown
 ```
 
-Use `UmlViewer` to show diagrams read-only.
+Use `UmlViewer` to show diagrams read-only, e.g. to embed them in a page:
+
+```js
+import { UmlViewer } from 'uml-js/lib/uml.js';
+import 'diagram-js/assets/diagram-js.css';
+
+const viewer = new UmlViewer({ container: '#canvas' });
+
+await viewer.importXML(xml);               // shows the first diagram
+
+await viewer.open(viewer.getViews()[1]);   // shows another diagram
+
+const { svg } = await viewer.saveSVG();    // the diagram shown
+```
+
+The viewer has no palette, context pad or editing, but diagrams can be panned and zoomed, and
+the drill-down buttons of e.g. submachine states and call behavior actions open the diagrams
+they refer to.
 
 Deleting a view with `modeler.deleteView(view)` removes its diagram. The model elements it shows are kept, with one exception: a state machine or activity that was shown by the diagram is left out when saving if by then nothing else refers to it or to anything it contains, since it could otherwise neither be seen nor reached. It stays in the model until then, so that undoing any change restores a consistent model and a saved file has no dangling references.
 
