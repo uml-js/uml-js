@@ -336,6 +336,11 @@
         {
           "name": "defaultValue",
           "type": "ValueSpecification"
+        },
+        {
+          "name": "qualifier",
+          "type": "Property",
+          "isMany": true
         }
       ]
     },

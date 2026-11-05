@@ -361,7 +361,13 @@ describe('moddle - XMI class diagrams', function() {
 
     expect(owns.memberEnd.map(end => end.type.id)).toEqual([ 'Bank', 'Account' ]);
     expect(owns.memberEnd[1].aggregation).toBe('composite');
-    expect(owns.memberEnd[1].upperValue.value).toBe('*');
+    expect(owns.memberEnd[1].upperValue.value).toBe('1');
+
+    // the bank qualifies its accounts by their number
+    const [ number ] = owns.memberEnd[0].qualifier;
+
+    expect(number.name).toBe('number');
+    expect(number.type.name).toBe('String');
 
     expect(model.packagedElement.find(e => e.id === 'AccountType').ownedLiteral.map(l => l.name)).toEqual([ 'SAVINGS', 'CHECKING' ]);
 

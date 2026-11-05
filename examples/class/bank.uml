@@ -58,10 +58,11 @@
       <ownedEnd xmi:id="owns_source" type="Bank" association="owns">
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="owns_source_lower" value="1"/>
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="owns_source_upper" value="1"/>
+        <qualifier xmi:id="owns_number" name="number" type="String"/>
       </ownedEnd>
       <ownedEnd xmi:id="owns_target" name="accounts" type="Account" aggregation="composite" association="owns">
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="owns_target_lower" value="0"/>
-        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="owns_target_upper" value="*"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="owns_target_upper" value="1"/>
       </ownedEnd>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="holds" memberEnd="holds_source holds_target">
@@ -80,59 +81,53 @@
       <bounds x="40" y="40" width="308" height="84"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Account_di" modelElement="Account">
-      <bounds x="460" y="40" width="204" height="116"/>
+      <bounds x="580" y="40" width="204" height="116"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Customer_di" modelElement="Customer">
-      <bounds x="860" y="40" width="160" height="84"/>
+      <bounds x="980" y="40" width="160" height="84"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Auditable_di" modelElement="Auditable">
       <bounds x="80" y="300" width="160" height="84"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Savings_di" modelElement="Savings">
-      <bounds x="380" y="320" width="160" height="84"/>
+      <bounds x="500" y="320" width="160" height="84"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="Checking_di" modelElement="Checking">
-      <bounds x="640" y="320" width="160" height="68"/>
+      <bounds x="760" y="320" width="160" height="68"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLClassifierShape" xmi:id="AccountType_di" modelElement="AccountType">
-      <bounds x="900" y="300" width="160" height="88"/>
+      <bounds x="1020" y="300" width="160" height="88"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="owns_di" source="Bank_di" target="Account_di" modelElement="owns">
       <waypoint x="348" y="82"/>
-      <waypoint x="460" y="82"/>
-      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="owns_source_label" modelElement="owns_source">
-        <bounds x="354" y="64" width="30" height="15"/>
-      </ownedElement>
-      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="owns_target_label" modelElement="owns_target">
-        <bounds x="397" y="64" width="57" height="15"/>
-      </ownedElement>
+      <waypoint x="580" y="82"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="holds_di" source="Customer_di" target="Account_di" modelElement="holds">
-      <waypoint x="860" y="82"/>
-      <waypoint x="664" y="82"/>
+      <waypoint x="980" y="82"/>
+      <waypoint x="784" y="82"/>
       <ownedElement xmi:type="umldi:UMLLabel" xmi:id="holds_source_label" modelElement="holds_source">
-        <bounds x="793" y="64" width="61" height="15"/>
+        <bounds x="913" y="64" width="61" height="15"/>
       </ownedElement>
       <ownedElement xmi:type="umldi:UMLLabel" xmi:id="holds_target_label" modelElement="holds_target">
-        <bounds x="670" y="64" width="30" height="15"/>
+        <bounds x="790" y="64" width="30" height="15"/>
       </ownedElement>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="realizes_di" source="Account_di" target="Auditable_di" modelElement="realizes">
-      <waypoint x="460" y="140"/>
+      <waypoint x="580" y="140"/>
       <waypoint x="160" y="140"/>
       <waypoint x="160" y="300"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="g1_di" source="Savings_di" target="Account_di" modelElement="g1">
-      <waypoint x="460" y="320"/>
-      <waypoint x="460" y="238"/>
-      <waypoint x="562" y="238"/>
-      <waypoint x="562" y="156"/>
+      <waypoint x="580" y="320"/>
+      <waypoint x="580" y="238"/>
+      <waypoint x="682" y="238"/>
+      <waypoint x="682" y="156"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLEdge" xmi:id="g2_di" source="Checking_di" target="Account_di" modelElement="g2">
-      <waypoint x="720" y="320"/>
-      <waypoint x="720" y="238"/>
-      <waypoint x="562" y="238"/>
-      <waypoint x="562" y="156"/>
+      <waypoint x="840" y="320"/>
+      <waypoint x="840" y="238"/>
+      <waypoint x="682" y="238"/>
+      <waypoint x="682" y="156"/>
     </ownedElement>
   </umldi:UMLClassDiagram>
 </xmi:XMI>

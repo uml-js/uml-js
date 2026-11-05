@@ -40,6 +40,21 @@ note is resized; it does not shrink by itself, and its size as read from a file 
 In sequence diagrams, messages are kept below the guards of the operands they are drawn in,
 together with their names.
 
+In class diagrams, the replace menu (wrench) of a relationship changes its kind and lists the
+current kind, marked. Aggregations and compositions are offered with the diamond at either
+classifier, named after both, e.g. *Composition: Bank owns Account*. *Reverse direction* reverses
+generalizations, interface realizations and dependencies, where the reversed relationship is
+allowed, and moves the diamond of aggregations and compositions to the other classifier.
+
+Association ends may be qualified (UML 2.5.1, 11.5.4): their qualifiers are shown in a box
+attached to the classifier at the end, and the multiplicity at the other end counts the instances
+per value of the qualifiers. *Add qualifier at …* in the replace menu adds a box and opens it for
+editing; the qualifiers are written as `name: Type`, separated by commas, and edited by
+double-clicking the box. Emptying the box or *Remove qualifiers at …* removes them. Types of
+qualifiers are looked up like those of attributes. The name and multiplicity of an end are edited by
+double-clicking its label or the line near the end, whose text may also start with the qualifiers
+between brackets, e.g. `[number: String] accounts 0..1`.
+
 Activity diagrams show actions, call behavior actions, structured activity nodes and expansion
 regions, control nodes, object nodes, partitions and interruptible regions:
 
