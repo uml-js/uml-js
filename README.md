@@ -34,6 +34,9 @@ e.g. `[$n \geq 3$]`. Prices like `500$` or `$5 to $10` stay text; `\$` is a doll
 Text wraps at spaces only, so that math stays on the line of the text written against it,
 e.g. the comma in `$c_k$, then`.
 
+Notes can be added to all diagrams. A note grows to fit its text when the text is edited or the
+note is resized; it does not shrink by itself, and its size as read from a file is kept.
+
 
 ## XMI
 
