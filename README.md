@@ -40,6 +40,22 @@ note is resized; it does not shrink by itself, and its size as read from a file 
 In sequence diagrams, messages are kept below the guards of the operands they are drawn in,
 together with their names.
 
+Activity diagrams show actions, call behavior actions, structured activity nodes and expansion
+regions, control nodes, object nodes, partitions and interruptible regions:
+
+* Pins are attached to the border of actions, expansion nodes to the border of expansion
+  regions. Expansion nodes on the bottom or right of their region are outputs when created,
+  others inputs; the replace menu changes inputs into outputs and back, and the mode of
+  expansion regions.
+* Flows are object flows where a pin, central buffer, data store or expansion node is involved,
+  control flows otherwise. Objects enter input pins and leave output pins, and also leave input
+  pins and enter output pins of structured activity nodes, from and to their content.
+* Partitions (swimlanes) and interruptible regions group the nodes whose middle they contain,
+  partitions also the flows between them. They are drawn behind the nodes, are selected at
+  their border and the header of partitions, and move without the nodes they group. Partitions
+  wider than high are horizontal, with their header at the left.
+* Flows leaving an interruptible region are marked as interrupting it in the replace menu.
+
 
 ## XMI
 

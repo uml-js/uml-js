@@ -1,165 +1,328 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:umldi="http://www.omg.org/spec/UML/20161101/UMLDI" xmlns:dc="http://www.omg.org/spec/DD/20131001/DC" xmlns:di="http://www.omg.org/spec/DD/20131001/DI">
   <uml:Model xmi:id="model" name="Orders">
-    <packagedElement xmi:type="uml:Activity" xmi:id="ProcessOrder" name="Process order">
-      <node xmi:type="uml:InitialNode" xmi:id="initial" outgoing="f1"/>
-      <node xmi:type="uml:OpaqueAction" xmi:id="receive" name="Receive order" incoming="f1" outgoing="f2"/>
-      <node xmi:type="uml:DecisionNode" xmi:id="decision" incoming="f2" outgoing="f3 f4"/>
-      <node xmi:type="uml:CallBehaviorAction" xmi:id="ship" name="Ship order" incoming="f3" outgoing="f5" behavior="ShipOrder"/>
-      <node xmi:type="uml:OpaqueAction" xmi:id="reject" name="Reject order" incoming="f4" outgoing="f11"/>
-      <node xmi:type="uml:ForkNode" xmi:id="fork" incoming="f5" outgoing="f6 f7"/>
-      <node xmi:type="uml:OpaqueAction" xmi:id="invoice" name="Send invoice" incoming="f6" outgoing="f8"/>
-      <node xmi:type="uml:OpaqueAction" xmi:id="stock" name="Update stock" incoming="f7" outgoing="f9"/>
-      <node xmi:type="uml:JoinNode" xmi:id="join" incoming="f8 f9" outgoing="f10"/>
-      <node xmi:type="uml:MergeNode" xmi:id="merge" incoming="f10 f11" outgoing="f12"/>
-      <node xmi:type="uml:ActivityFinalNode" xmi:id="final" incoming="f12"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f1" source="initial" target="receive"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f2" source="receive" target="decision"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f3" source="decision" target="ship">
-        <guard xmi:type="uml:OpaqueExpression" xmi:id="f3_guard">
-          <body>in stock</body>
-        </guard>
-      </edge>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f4" source="decision" target="reject">
-        <guard xmi:type="uml:OpaqueExpression" xmi:id="f4_guard">
+    <packagedElement xmi:type="uml:Activity" xmi:id="ProcessOrder" name="Process order" partition="customer shop warehouse">
+      <node xmi:type="uml:InitialNode" xmi:id="initial" outgoing="f_start" inPartition="customer"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="place" name="Place order" incoming="f_start" inPartition="customer">
+        <outputValue xmi:id="place_out" name="order" outgoing="f_order" inPartition="customer"/>
+      </node>
+      <node xmi:type="uml:OpaqueAction" xmi:id="receive" name="Receive order" outgoing="f_check" inPartition="shop">
+        <inputValue xmi:id="receive_in" name="order" incoming="f_order" inPartition="shop"/>
+        <outputValue xmi:id="receive_out" name="order" outgoing="f_store" inPartition="shop"/>
+      </node>
+      <node xmi:type="uml:DataStoreNode" xmi:id="orders" name="Orders" incoming="f_store" outgoing="f_items" inPartition="shop"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="check" incoming="f_check" outgoing="f_reject f_pay" inPartition="shop"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="reject" name="Reject order" incoming="f_reject" outgoing="f_rejected" inPartition="customer"/>
+      <node xmi:type="uml:FlowFinalNode" xmi:id="rejected" incoming="f_rejected" inPartition="customer"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="pay" name="Wait for payment" incoming="f_pay" outgoing="f_paid" inPartition="shop" inInterruptibleRegion="payment"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="cancelled" name="Cancellation requested" outgoing="f_cancel" inPartition="shop" inInterruptibleRegion="payment"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="cancel" name="Cancel order" incoming="f_cancel" outgoing="f_cancelled" inPartition="customer"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="cancel_final" incoming="f_cancelled" inPartition="customer"/>
+      <node xmi:type="uml:ForkNode" xmi:id="fork" incoming="f_paid" outgoing="f_invoice f_pack" inPartition="shop"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="invoice" name="Send invoice" incoming="f_invoice" outgoing="f_invoiced" inPartition="shop"/>
+      <node xmi:type="uml:ExpansionRegion" xmi:id="pack" name="Pack items" incoming="f_pack" inPartition="warehouse" mode="parallel" inputElement="items" outputElement="parcels">
+        <node xmi:type="uml:CallBehaviorAction" xmi:id="pack_item" inPartition="warehouse" behavior="PackItem">
+          <argument xmi:id="pack_item_in" name="item" incoming="f_item" inPartition="warehouse"/>
+          <result xmi:id="pack_item_out" name="parcel" outgoing="f_parcel" inPartition="warehouse"/>
+        </node>
+        <edge xmi:type="uml:ObjectFlow" xmi:id="f_item" source="items" target="pack_item_in" inPartition="warehouse"/>
+        <edge xmi:type="uml:ObjectFlow" xmi:id="f_parcel" source="pack_item_out" target="parcels" inPartition="warehouse"/>
+      </node>
+      <node xmi:type="uml:ExpansionNode" xmi:id="items" name="items" incoming="f_items" outgoing="f_item" inPartition="warehouse" regionAsInput="pack"/>
+      <node xmi:type="uml:ExpansionNode" xmi:id="parcels" name="parcels" incoming="f_parcel" outgoing="f_ship" inPartition="warehouse" regionAsOutput="pack"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="ship" name="Ship parcels" outgoing="f_shipped" inPartition="warehouse">
+        <inputValue xmi:id="ship_in" name="parcels" incoming="f_ship" inPartition="warehouse"/>
+      </node>
+      <node xmi:type="uml:JoinNode" xmi:id="join" incoming="f_invoiced f_shipped" outgoing="f_end" inPartition="shop"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="final" incoming="f_end" inPartition="shop"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_start" source="initial" target="place" inPartition="customer"/>
+      <edge xmi:type="uml:ObjectFlow" xmi:id="f_order" source="place_out" target="receive_in"/>
+      <edge xmi:type="uml:ObjectFlow" xmi:id="f_store" source="receive_out" target="orders" inPartition="shop"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_check" source="receive" target="check" inPartition="shop"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_reject" source="check" target="reject">
+        <guard xmi:type="uml:OpaqueExpression" xmi:id="f_reject_guard">
           <body>else</body>
         </guard>
       </edge>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f5" source="ship" target="fork"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f6" source="fork" target="invoice"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f7" source="fork" target="stock"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f8" source="invoice" target="join"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f9" source="stock" target="join"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f10" source="join" target="merge"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f11" source="reject" target="merge"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="f12" source="merge" target="final"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_rejected" source="reject" target="rejected" inPartition="customer"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_pay" source="check" target="pay" inPartition="shop">
+        <guard xmi:type="uml:OpaqueExpression" xmi:id="f_pay_guard">
+          <body>in stock</body>
+        </guard>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_cancel" source="cancelled" target="cancel" interrupts="payment"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_cancelled" source="cancel" target="cancel_final" inPartition="customer"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_paid" source="pay" target="fork" inPartition="shop"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_invoice" source="fork" target="invoice" inPartition="shop"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_pack" source="fork" target="pack"/>
+      <edge xmi:type="uml:ObjectFlow" xmi:id="f_items" source="orders" target="items"/>
+      <edge xmi:type="uml:ObjectFlow" xmi:id="f_ship" source="parcels" target="ship_in" inPartition="warehouse"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_invoiced" source="invoice" target="join" inPartition="shop"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_shipped" source="ship" target="join"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="f_end" source="join" target="final" inPartition="shop"/>
+      <group xmi:type="uml:ActivityPartition" xmi:id="customer" name="Customer" node="initial place place_out reject rejected cancel cancel_final" edge="f_start f_rejected f_cancelled"/>
+      <group xmi:type="uml:ActivityPartition" xmi:id="shop" name="Shop" node="receive receive_in receive_out orders check pay cancelled fork invoice join final" edge="f_store f_check f_pay f_paid f_invoice f_invoiced f_end"/>
+      <group xmi:type="uml:ActivityPartition" xmi:id="warehouse" name="Warehouse" node="pack items parcels pack_item pack_item_in pack_item_out ship ship_in" edge="f_item f_parcel f_ship"/>
+      <group xmi:type="uml:InterruptibleActivityRegion" xmi:id="payment" name="Payment" node="pay cancelled" interruptingEdge="f_cancel"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Activity" xmi:id="ShipOrder" name="Ship order">
-      <node xmi:type="uml:InitialNode" xmi:id="ship_initial" outgoing="s1"/>
-      <node xmi:type="uml:OpaqueAction" xmi:id="pack" name="Pack items" incoming="s1" outgoing="s2"/>
-      <node xmi:type="uml:OpaqueAction" xmi:id="handover" name="Hand over to carrier" incoming="s2" outgoing="s3"/>
-      <node xmi:type="uml:ActivityFinalNode" xmi:id="ship_final" incoming="s3"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="s1" source="ship_initial" target="pack"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="s2" source="pack" target="handover"/>
-      <edge xmi:type="uml:ControlFlow" xmi:id="s3" source="handover" target="ship_final"/>
+    <packagedElement xmi:type="uml:Activity" xmi:id="PackItem" name="Pack item">
+      <node xmi:type="uml:InitialNode" xmi:id="p_initial" outgoing="p_f1"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="p_pick" name="Pick item" incoming="p_f1" outgoing="p_f2"/>
+      <node xmi:type="uml:DecisionNode" xmi:id="p_fragile" incoming="p_f2" outgoing="p_f3 p_f4"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="p_wrap" name="Wrap item" incoming="p_f3" outgoing="p_f5"/>
+      <node xmi:type="uml:MergeNode" xmi:id="p_merge" incoming="p_f4 p_f5" outgoing="p_f6"/>
+      <node xmi:type="uml:OpaqueAction" xmi:id="p_box" name="Box item" incoming="p_f6" outgoing="p_f7"/>
+      <node xmi:type="uml:ActivityFinalNode" xmi:id="p_final" incoming="p_f7"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="p_f1" source="p_initial" target="p_pick"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="p_f2" source="p_pick" target="p_fragile"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="p_f3" source="p_fragile" target="p_wrap">
+        <guard xmi:type="uml:OpaqueExpression" xmi:id="p_f3_guard">
+          <body>fragile</body>
+        </guard>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="p_f4" source="p_fragile" target="p_merge">
+        <guard xmi:type="uml:OpaqueExpression" xmi:id="p_f4_guard">
+          <body>else</body>
+        </guard>
+      </edge>
+      <edge xmi:type="uml:ControlFlow" xmi:id="p_f5" source="p_wrap" target="p_merge"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="p_f6" source="p_merge" target="p_box"/>
+      <edge xmi:type="uml:ControlFlow" xmi:id="p_f7" source="p_box" target="p_final"/>
     </packagedElement>
   </uml:Model>
   <umldi:UMLActivityDiagram xmi:id="ProcessOrder_diagram" name="Process order" modelElement="ProcessOrder">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="customer_di" modelElement="customer">
+      <bounds x="40" y="20" width="260" height="1020"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="shop_di" modelElement="shop">
+      <bounds x="300" y="20" width="400" height="1020"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="warehouse_di" modelElement="warehouse">
+      <bounds x="700" y="20" width="400" height="1020"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="payment_di" modelElement="payment">
+      <bounds x="360" y="300" width="160" height="170"/>
+    </ownedElement>
     <ownedElement xmi:type="umldi:UMLShape" xmi:id="initial_di" modelElement="initial">
-      <bounds x="40" y="95" width="24" height="24"/>
+      <bounds x="158" y="80" width="24" height="24"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="place_di" modelElement="place">
+      <bounds x="110" y="130" width="120" height="60"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="place_out_di" modelElement="place_out">
+        <bounds x="222" y="152" width="16" height="16"/>
+      </ownedElement>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLShape" xmi:id="receive_di" modelElement="receive">
-      <bounds x="110" y="77" width="120" height="60"/>
+      <bounds x="380" y="130" width="120" height="60"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="receive_in_di" modelElement="receive_in">
+        <bounds x="372" y="152" width="16" height="16"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="receive_out_di" modelElement="receive_out">
+        <bounds x="492" y="152" width="16" height="16"/>
+      </ownedElement>
     </ownedElement>
-    <ownedElement xmi:type="umldi:UMLShape" xmi:id="decision_di" modelElement="decision">
-      <bounds x="290" y="89" width="36" height="36"/>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="orders_di" modelElement="orders">
+      <bounds x="560" y="135" width="120" height="50"/>
     </ownedElement>
-    <ownedElement xmi:type="umldi:UMLShape" xmi:id="ship_di" modelElement="ship">
-      <bounds x="380" y="30" width="120" height="60"/>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="check_di" modelElement="check">
+      <bounds x="422" y="230" width="36" height="36"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLShape" xmi:id="reject_di" modelElement="reject">
-      <bounds x="380" y="140" width="120" height="60"/>
+      <bounds x="110" y="223" width="120" height="50"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="rejected_di" modelElement="rejected">
+      <bounds x="158" y="300" width="24" height="24"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="pay_di" modelElement="pay">
+      <bounds x="380" y="320" width="120" height="50"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="cancelled_di" modelElement="cancelled">
+      <bounds x="380" y="400" width="120" height="50"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="cancel_di" modelElement="cancel">
+      <bounds x="110" y="400" width="120" height="50"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="cancel_final_di" modelElement="cancel_final">
+      <bounds x="155" y="490" width="30" height="30"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLShape" xmi:id="fork_di" modelElement="fork">
-      <bounds x="560" y="20" width="8" height="80"/>
+      <bounds x="520" y="500" width="160" height="8"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLShape" xmi:id="invoice_di" modelElement="invoice">
-      <bounds x="620" y="10" width="120" height="50"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLShape" xmi:id="stock_di" modelElement="stock">
-      <bounds x="620" y="70" width="120" height="50"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLShape" xmi:id="join_di" modelElement="join">
-      <bounds x="790" y="20" width="8" height="80"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLShape" xmi:id="merge_di" modelElement="merge">
-      <bounds x="850" y="152" width="36" height="36"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLShape" xmi:id="final_di" modelElement="final">
-      <bounds x="940" y="155" width="30" height="30"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f1_di" modelElement="f1" source="initial_di" target="receive_di">
-      <waypoint x="64" y="107"/>
-      <waypoint x="110" y="107"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f2_di" modelElement="f2" source="receive_di" target="decision_di">
-      <waypoint x="230" y="107"/>
-      <waypoint x="290" y="107"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f3_di" modelElement="f3" source="decision_di" target="ship_di">
-      <waypoint x="308" y="89"/>
-      <waypoint x="308" y="60"/>
-      <waypoint x="380" y="60"/>
-      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="f3_label" modelElement="f3">
-        <bounds x="314" y="38" width="62" height="18"/>
-      </ownedElement>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f4_di" modelElement="f4" source="decision_di" target="reject_di">
-      <waypoint x="308" y="125"/>
-      <waypoint x="308" y="170"/>
-      <waypoint x="380" y="170"/>
-      <ownedElement xmi:type="umldi:UMLLabel" xmi:id="f4_label" modelElement="f4">
-        <bounds x="320" y="148" width="40" height="18"/>
-      </ownedElement>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f5_di" modelElement="f5" source="ship_di" target="fork_di">
-      <waypoint x="500" y="60"/>
-      <waypoint x="560" y="60"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f6_di" modelElement="f6" source="fork_di" target="invoice_di">
-      <waypoint x="568" y="35"/>
-      <waypoint x="620" y="35"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f7_di" modelElement="f7" source="fork_di" target="stock_di">
-      <waypoint x="568" y="95"/>
-      <waypoint x="620" y="95"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f8_di" modelElement="f8" source="invoice_di" target="join_di">
-      <waypoint x="740" y="35"/>
-      <waypoint x="790" y="35"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f9_di" modelElement="f9" source="stock_di" target="join_di">
-      <waypoint x="740" y="95"/>
-      <waypoint x="790" y="95"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f10_di" modelElement="f10" source="join_di" target="merge_di">
-      <waypoint x="798" y="60"/>
-      <waypoint x="868" y="60"/>
-      <waypoint x="868" y="152"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f11_di" modelElement="f11" source="reject_di" target="merge_di">
-      <waypoint x="500" y="170"/>
-      <waypoint x="850" y="170"/>
-    </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f12_di" modelElement="f12" source="merge_di" target="final_di">
-      <waypoint x="886" y="170"/>
-      <waypoint x="940" y="170"/>
-    </ownedElement>
-  </umldi:UMLActivityDiagram>
-  <umldi:UMLActivityDiagram xmi:id="ShipOrder_diagram" name="Ship order" modelElement="ShipOrder">
-    <ownedElement xmi:type="umldi:UMLShape" xmi:id="ship_initial_di" modelElement="ship_initial">
-      <bounds x="40" y="48" width="24" height="24"/>
+      <bounds x="380" y="560" width="120" height="50"/>
     </ownedElement>
     <ownedElement xmi:type="umldi:UMLShape" xmi:id="pack_di" modelElement="pack">
-      <bounds x="110" y="30" width="120" height="60"/>
+      <bounds x="750" y="580" width="300" height="200"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="items_di" modelElement="items">
+        <bounds x="836" y="572" width="48" height="16"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="parcels_di" modelElement="parcels">
+        <bounds x="876" y="772" width="48" height="16"/>
+      </ownedElement>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="pack_item_di" modelElement="pack_item">
+        <bounds x="840" y="640" width="120" height="60"/>
+        <ownedElement xmi:type="umldi:UMLShape" xmi:id="pack_item_in_di" modelElement="pack_item_in">
+          <bounds x="832" y="662" width="16" height="16"/>
+        </ownedElement>
+        <ownedElement xmi:type="umldi:UMLShape" xmi:id="pack_item_out_di" modelElement="pack_item_out">
+          <bounds x="952" y="662" width="16" height="16"/>
+        </ownedElement>
+      </ownedElement>
     </ownedElement>
-    <ownedElement xmi:type="umldi:UMLShape" xmi:id="handover_di" modelElement="handover">
-      <bounds x="290" y="30" width="120" height="60"/>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="ship_di" modelElement="ship">
+      <bounds x="840" y="860" width="120" height="50"/>
+      <ownedElement xmi:type="umldi:UMLShape" xmi:id="ship_in_di" modelElement="ship_in">
+        <bounds x="892" y="852" width="16" height="16"/>
+      </ownedElement>
     </ownedElement>
-    <ownedElement xmi:type="umldi:UMLShape" xmi:id="ship_final_di" modelElement="ship_final">
-      <bounds x="470" y="45" width="30" height="30"/>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="join_di" modelElement="join">
+      <bounds x="520" y="930" width="160" height="8"/>
     </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="s1_di" modelElement="s1" source="ship_initial_di" target="pack_di">
-      <waypoint x="64" y="60"/>
-      <waypoint x="110" y="60"/>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="final_di" modelElement="final">
+      <bounds x="585" y="970" width="30" height="30"/>
     </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="s2_di" modelElement="s2" source="pack_di" target="handover_di">
-      <waypoint x="230" y="60"/>
-      <waypoint x="290" y="60"/>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_start_di" modelElement="f_start" source="initial_di" target="place_di">
+      <waypoint x="170" y="104"/>
+      <waypoint x="170" y="130"/>
     </ownedElement>
-    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="s3_di" modelElement="s3" source="handover_di" target="ship_final_di">
-      <waypoint x="410" y="60"/>
-      <waypoint x="470" y="60"/>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_order_di" modelElement="f_order" source="place_out_di" target="receive_in_di">
+      <waypoint x="238" y="160"/>
+      <waypoint x="372" y="160"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_store_di" modelElement="f_store" source="receive_out_di" target="orders_di">
+      <waypoint x="508" y="160"/>
+      <waypoint x="560" y="160"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_check_di" modelElement="f_check" source="receive_di" target="check_di">
+      <waypoint x="440" y="190"/>
+      <waypoint x="440" y="230"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_reject_di" modelElement="f_reject" source="check_di" target="reject_di">
+      <waypoint x="422" y="248"/>
+      <waypoint x="230" y="248"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_rejected_di" modelElement="f_rejected" source="reject_di" target="rejected_di">
+      <waypoint x="170" y="273"/>
+      <waypoint x="170" y="300"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_pay_di" modelElement="f_pay" source="check_di" target="pay_di">
+      <waypoint x="440" y="266"/>
+      <waypoint x="440" y="320"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_cancel_di" modelElement="f_cancel" source="cancelled_di" target="cancel_di">
+      <waypoint x="380" y="425"/>
+      <waypoint x="230" y="425"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_cancelled_di" modelElement="f_cancelled" source="cancel_di" target="cancel_final_di">
+      <waypoint x="170" y="450"/>
+      <waypoint x="170" y="490"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_paid_di" modelElement="f_paid" source="pay_di" target="fork_di">
+      <waypoint x="500" y="345"/>
+      <waypoint x="600" y="345"/>
+      <waypoint x="600" y="500"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_invoice_di" modelElement="f_invoice" source="fork_di" target="invoice_di">
+      <waypoint x="560" y="508"/>
+      <waypoint x="560" y="535"/>
+      <waypoint x="440" y="535"/>
+      <waypoint x="440" y="560"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_pack_di" modelElement="f_pack" source="fork_di" target="pack_di">
+      <waypoint x="640" y="508"/>
+      <waypoint x="640" y="680"/>
+      <waypoint x="750" y="680"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_items_di" modelElement="f_items" source="orders_di" target="items_di">
+      <waypoint x="680" y="160"/>
+      <waypoint x="860" y="160"/>
+      <waypoint x="860" y="572"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_item_di" modelElement="f_item" source="items_di" target="pack_item_in_di">
+      <waypoint x="860" y="588"/>
+      <waypoint x="860" y="615"/>
+      <waypoint x="810" y="615"/>
+      <waypoint x="810" y="670"/>
+      <waypoint x="832" y="670"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_parcel_di" modelElement="f_parcel" source="pack_item_out_di" target="parcels_di">
+      <waypoint x="968" y="670"/>
+      <waypoint x="1010" y="670"/>
+      <waypoint x="1010" y="745"/>
+      <waypoint x="900" y="745"/>
+      <waypoint x="900" y="772"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_ship_di" modelElement="f_ship" source="parcels_di" target="ship_in_di">
+      <waypoint x="900" y="788"/>
+      <waypoint x="900" y="852"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_invoiced_di" modelElement="f_invoiced" source="invoice_di" target="join_di">
+      <waypoint x="440" y="610"/>
+      <waypoint x="440" y="900"/>
+      <waypoint x="560" y="900"/>
+      <waypoint x="560" y="930"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_shipped_di" modelElement="f_shipped" source="ship_di" target="join_di">
+      <waypoint x="840" y="885"/>
+      <waypoint x="640" y="885"/>
+      <waypoint x="640" y="930"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="f_end_di" modelElement="f_end" source="join_di" target="final_di">
+      <waypoint x="600" y="938"/>
+      <waypoint x="600" y="970"/>
+    </ownedElement>
+  </umldi:UMLActivityDiagram>
+  <umldi:UMLActivityDiagram xmi:id="PackItem_diagram" name="Pack item" modelElement="PackItem">
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="p_initial_di" modelElement="p_initial">
+      <bounds x="100" y="98" width="24" height="24"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="p_pick_di" modelElement="p_pick">
+      <bounds x="170" y="80" width="120" height="60"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="p_fragile_di" modelElement="p_fragile">
+      <bounds x="350" y="92" width="36" height="36"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="p_wrap_di" modelElement="p_wrap">
+      <bounds x="440" y="20" width="120" height="50"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="p_merge_di" modelElement="p_merge">
+      <bounds x="620" y="92" width="36" height="36"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="p_box_di" modelElement="p_box">
+      <bounds x="710" y="80" width="120" height="60"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLShape" xmi:id="p_final_di" modelElement="p_final">
+      <bounds x="890" y="95" width="30" height="30"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="p_f1_di" modelElement="p_f1" source="p_initial_di" target="p_pick_di">
+      <waypoint x="124" y="110"/>
+      <waypoint x="170" y="110"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="p_f2_di" modelElement="p_f2" source="p_pick_di" target="p_fragile_di">
+      <waypoint x="290" y="110"/>
+      <waypoint x="350" y="110"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="p_f3_di" modelElement="p_f3" source="p_fragile_di" target="p_wrap_di">
+      <waypoint x="368" y="92"/>
+      <waypoint x="368" y="45"/>
+      <waypoint x="440" y="45"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="p_f4_di" modelElement="p_f4" source="p_fragile_di" target="p_merge_di">
+      <waypoint x="386" y="110"/>
+      <waypoint x="620" y="110"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="p_f5_di" modelElement="p_f5" source="p_wrap_di" target="p_merge_di">
+      <waypoint x="560" y="45"/>
+      <waypoint x="638" y="45"/>
+      <waypoint x="638" y="92"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="p_f6_di" modelElement="p_f6" source="p_merge_di" target="p_box_di">
+      <waypoint x="656" y="110"/>
+      <waypoint x="710" y="110"/>
+    </ownedElement>
+    <ownedElement xmi:type="umldi:UMLEdge" xmi:id="p_f7_di" modelElement="p_f7" source="p_box_di" target="p_final_di">
+      <waypoint x="830" y="110"/>
+      <waypoint x="890" y="110"/>
     </ownedElement>
   </umldi:UMLActivityDiagram>
 </xmi:XMI>

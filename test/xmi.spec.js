@@ -256,15 +256,39 @@ describe('moddle - XMI activity diagrams', function() {
     const [ model ] = document.getElements('uml:Model');
     const activity = model.packagedElement[0];
 
+    const node = id => activity.node.find(n => n.id === id);
+
     expect(activity.$type).toBe('uml:Activity');
-    expect(activity.node.find(n => n.id === 'decision').outgoing.map(f => f.id)).toEqual([ 'f3', 'f4' ]);
-    expect(activity.edge.find(e => e.id === 'f3').guard.body).toEqual([ 'in stock' ]);
+    expect(node('check').outgoing.map(f => f.id)).toEqual([ 'f_reject', 'f_pay' ]);
+    expect(activity.edge.find(e => e.id === 'f_pay').guard.body).toEqual([ 'in stock' ]);
 
-    const ship = activity.node.find(n => n.id === 'ship');
+    // pins, object flows, data stores
+    const receive = node('receive');
 
-    expect(ship.$type).toBe('uml:CallBehaviorAction');
-    expect(ship.behavior).toBe(model.packagedElement[1]);
-    expect(ship.behavior.name).toBe('Ship order');
+    expect(receive.inputValue.map(p => p.id)).toEqual([ 'receive_in' ]);
+    expect(receive.outputValue[0].outgoing[0].$type).toBe('uml:ObjectFlow');
+    expect(receive.outputValue[0].outgoing[0].target).toBe(node('orders'));
+    expect(node('orders').$type).toBe('uml:DataStoreNode');
+
+    // expansion regions, calling an activity
+    const pack = node('pack');
+
+    expect(pack.$type).toBe('uml:ExpansionRegion');
+    expect(pack.mode).toBe('parallel');
+    expect(pack.inputElement).toEqual([ node('items') ]);
+    expect(node('parcels').regionAsOutput).toBe(pack);
+
+    const packItem = pack.node.find(n => n.id === 'pack_item');
+
+    expect(packItem.$type).toBe('uml:CallBehaviorAction');
+    expect(packItem.behavior).toBe(model.packagedElement[1]);
+    expect(packItem.behavior.name).toBe('Pack item');
+    expect(packItem.argument.map(p => p.id)).toEqual([ 'pack_item_in' ]);
+
+    // partitions, interruptible regions
+    expect(activity.partition.map(p => p.name)).toEqual([ 'Customer', 'Shop', 'Warehouse' ]);
+    expect(receive.inPartition.map(p => p.name)).toEqual([ 'Shop' ]);
+    expect(activity.edge.find(e => e.id === 'f_cancel').interrupts).toBe(activity.group.find(g => g.id === 'payment'));
 
     const { xml } = await moddle.toXML(document);
     const { document: reimported } = await moddle.fromXML(xml);

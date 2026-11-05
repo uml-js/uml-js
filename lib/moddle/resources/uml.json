@@ -709,6 +709,17 @@
           "name": "edge",
           "type": "ActivityEdge",
           "isMany": true
+        },
+        {
+          "name": "group",
+          "type": "ActivityGroup",
+          "isMany": true
+        },
+        {
+          "name": "partition",
+          "type": "ActivityPartition",
+          "isMany": true,
+          "isReference": true
         }
       ]
     },
@@ -728,6 +739,18 @@
         {
           "name": "outgoing",
           "type": "ActivityEdge",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "inPartition",
+          "type": "ActivityPartition",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "inInterruptibleRegion",
+          "type": "InterruptibleActivityRegion",
           "isMany": true,
           "isReference": true
         }
@@ -762,6 +785,16 @@
           "name": "language",
           "type": "String",
           "isMany": true
+        },
+        {
+          "name": "inputValue",
+          "type": "InputPin",
+          "isMany": true
+        },
+        {
+          "name": "outputValue",
+          "type": "OutputPin",
+          "isMany": true
         }
       ]
     },
@@ -770,6 +803,13 @@
       "isAbstract": true,
       "superClass": [
         "Action"
+      ],
+      "properties": [
+        {
+          "name": "argument",
+          "type": "InputPin",
+          "isMany": true
+        }
       ]
     },
     {
@@ -783,6 +823,11 @@
           "name": "isSynchronous",
           "type": "Boolean",
           "default": true
+        },
+        {
+          "name": "result",
+          "type": "OutputPin",
+          "isMany": true
         }
       ]
     },
@@ -818,6 +863,41 @@
         {
           "name": "mustIsolate",
           "type": "Boolean"
+        },
+        {
+          "name": "structuredNodeInput",
+          "type": "InputPin",
+          "isMany": true
+        },
+        {
+          "name": "structuredNodeOutput",
+          "type": "OutputPin",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "ExpansionRegion",
+      "superClass": [
+        "StructuredActivityNode"
+      ],
+      "properties": [
+        {
+          "name": "mode",
+          "type": "ExpansionKind",
+          "default": "iterative"
+        },
+        {
+          "name": "inputElement",
+          "type": "ExpansionNode",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "outputElement",
+          "type": "ExpansionNode",
+          "isMany": true,
+          "isReference": true
         }
       ]
     },
@@ -878,6 +958,90 @@
       ]
     },
     {
+      "name": "ObjectNode",
+      "isAbstract": true,
+      "superClass": [
+        "ActivityNode",
+        "TypedElement"
+      ],
+      "properties": [
+        {
+          "name": "ordering",
+          "type": "ObjectNodeOrderingKind",
+          "default": "FIFO"
+        },
+        {
+          "name": "isControlType",
+          "type": "Boolean"
+        },
+        {
+          "name": "upperBound",
+          "type": "ValueSpecification"
+        },
+        {
+          "name": "selection",
+          "type": "Behavior",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "Pin",
+      "isAbstract": true,
+      "superClass": [
+        "ObjectNode",
+        "MultiplicityElement"
+      ],
+      "properties": [
+        {
+          "name": "isControl",
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
+      "name": "InputPin",
+      "superClass": [
+        "Pin"
+      ]
+    },
+    {
+      "name": "OutputPin",
+      "superClass": [
+        "Pin"
+      ]
+    },
+    {
+      "name": "CentralBufferNode",
+      "superClass": [
+        "ObjectNode"
+      ]
+    },
+    {
+      "name": "DataStoreNode",
+      "superClass": [
+        "CentralBufferNode"
+      ]
+    },
+    {
+      "name": "ExpansionNode",
+      "superClass": [
+        "ObjectNode"
+      ],
+      "properties": [
+        {
+          "name": "regionAsInput",
+          "type": "ExpansionRegion",
+          "isReference": true
+        },
+        {
+          "name": "regionAsOutput",
+          "type": "ExpansionRegion",
+          "isReference": true
+        }
+      ]
+    },
+    {
       "name": "ActivityEdge",
       "isAbstract": true,
       "superClass": [
@@ -897,6 +1061,17 @@
         {
           "name": "guard",
           "type": "ValueSpecification"
+        },
+        {
+          "name": "inPartition",
+          "type": "ActivityPartition",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "interrupts",
+          "type": "InterruptibleActivityRegion",
+          "isReference": true
         }
       ]
     },
@@ -904,6 +1079,97 @@
       "name": "ControlFlow",
       "superClass": [
         "ActivityEdge"
+      ]
+    },
+    {
+      "name": "ObjectFlow",
+      "superClass": [
+        "ActivityEdge"
+      ],
+      "properties": [
+        {
+          "name": "isMulticast",
+          "type": "Boolean"
+        },
+        {
+          "name": "isMultireceive",
+          "type": "Boolean"
+        },
+        {
+          "name": "transformation",
+          "type": "Behavior",
+          "isReference": true
+        },
+        {
+          "name": "selection",
+          "type": "Behavior",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "ActivityGroup",
+      "isAbstract": true,
+      "superClass": [
+        "NamedElement"
+      ]
+    },
+    {
+      "name": "ActivityPartition",
+      "superClass": [
+        "ActivityGroup"
+      ],
+      "properties": [
+        {
+          "name": "isDimension",
+          "type": "Boolean"
+        },
+        {
+          "name": "isExternal",
+          "type": "Boolean"
+        },
+        {
+          "name": "node",
+          "type": "ActivityNode",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "edge",
+          "type": "ActivityEdge",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "subpartition",
+          "type": "ActivityPartition",
+          "isMany": true
+        },
+        {
+          "name": "represents",
+          "type": "Element",
+          "isReference": true
+        }
+      ]
+    },
+    {
+      "name": "InterruptibleActivityRegion",
+      "superClass": [
+        "ActivityGroup"
+      ],
+      "properties": [
+        {
+          "name": "node",
+          "type": "ActivityNode",
+          "isMany": true,
+          "isReference": true
+        },
+        {
+          "name": "interruptingEdge",
+          "type": "ActivityEdge",
+          "isMany": true,
+          "isReference": true
+        }
       ]
     },
     {
@@ -1541,6 +1807,37 @@
         },
         {
           "name": "return"
+        }
+      ]
+    },
+    {
+      "name": "ObjectNodeOrderingKind",
+      "literalValues": [
+        {
+          "name": "unordered"
+        },
+        {
+          "name": "ordered"
+        },
+        {
+          "name": "LIFO"
+        },
+        {
+          "name": "FIFO"
+        }
+      ]
+    },
+    {
+      "name": "ExpansionKind",
+      "literalValues": [
+        {
+          "name": "parallel"
+        },
+        {
+          "name": "iterative"
+        },
+        {
+          "name": "stream"
         }
       ]
     }
