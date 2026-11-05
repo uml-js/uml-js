@@ -37,6 +37,9 @@ e.g. the comma in `$c_k$, then`.
 Notes can be added to all diagrams. A note grows to fit its text when the text is edited or the
 note is resized; it does not shrink by itself, and its size as read from a file is kept.
 
+In sequence diagrams, messages are kept below the guards of the operands they are drawn in,
+together with their names.
+
 
 ## XMI
 
