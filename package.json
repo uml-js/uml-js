@@ -5,7 +5,8 @@
   "type": "module",
   "main": "lib/uml.js",
   "exports": {
-    ".": "./lib/uml.js"
+    ".": "./lib/uml.js",
+    "./moddle": "./lib/moddle/index.js"
   },
   "files": [
     "lib"

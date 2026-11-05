@@ -44,6 +44,17 @@ e.g. `[$n \geq 3$]`. Prices like `500$` or `$5 to $10` stay text; `\$` is a doll
 
 ## Usage
 
+The moddle, which reads and writes XMI, also runs in Node without a bundler:
+
+```js
+import UmlModdle from '@uml-js/uml-js/moddle';
+
+const moddle = new UmlModdle();
+
+const { document, warnings } = await moddle.fromXML(xml);
+const { xml: written } = await moddle.toXML(document);
+```
+
 ```js
 import { UmlModeler } from 'uml-js/lib/uml.js';
 import 'diagram-js/assets/diagram-js.css';
